@@ -185,7 +185,7 @@ protected:
     void                    IProcessRenderRequests(hsTArray<plRenderRequest*>& reqs);
     void                    IAddRenderRequest(plRenderRequest* req);
 
-    bool                    IPlayIntroBink(const char* movieName, float endDelay, float posX, float posY, float scaleX, float scaleY, float volume = 1.0);
+    bool                    IPlayIntroMovie(const char* movieName, float endDelay, float posX, float posY, float scaleX, float scaleY, float volume = 1.0);
     bool                    IHandleMovieMsg(plMovieMsg* mov);
     void                    IKillMovies();
     void                    IServiceMovies();

@@ -275,7 +275,7 @@ bool plClient::Shutdown()
     IKillMovies();
 
     plgAudioSys::Activate(false);
-    //
+
     // Get any proxies to commit suicide.
     plProxyDrawMsg* nuke = new plProxyDrawMsg(plProxyDrawMsg::kAllTypes
                                             | plProxyDrawMsg::kDestroy);
@@ -1442,11 +1442,7 @@ bool plClient::StartInit()
 
     plgAudioSys::Activate(true);
 
-    plConst(float) delay(2.f);
-    //commenting out publisher splash for MORE
-    //IPlayIntroBink("avi/intro0.webm", delay, 0.f, 0.f, 1.f, 1.f, 0.75);
-    //if( GetDone() ) return false;
-    IPlayIntroBink("avi/intro1.webm", 0.f, 0.f, 0.f, 1.f, 1.f, 0.75);
+    IPlayIntroMovie("avi/CyanWorlds.webm", 0.f, 0.f, 0.f, 1.f, 1.f, 0.75);
     if( GetDone() ) return false;
     plgDispatch::Dispatch()->RegisterForExactType(plMovieMsg::Index(), GetKey());
 
@@ -1858,7 +1854,7 @@ void plClient::IKillMovies()
     fMovies.Reset();
 }
 
-bool plClient::IPlayIntroBink(const char* movieName, float endDelay, float posX, float posY, float scaleX, float scaleY, float volume /* = 1.0 */)
+bool plClient::IPlayIntroMovie(const char* movieName, float endDelay, float posX, float posY, float scaleX, float scaleY, float volume /* = 1.0 */)
 {
     SetQuitIntro(false);
     plMoviePlayer player;
