@@ -2884,21 +2884,6 @@ void    plDXPipeline::Render( plDrawable *d, const hsTArray<int16_t>& visList )
     }
 }
 
-//// BeginDrawable ////////////////////////////////////////////////////////////
-// Obsolete, should be removed
-bool plDXPipeline::BeginDrawable( plDrawable *d )
-{
-    return true;
-}
-
-//// EndDrawable //////////////////////////////////////////////////////////////
-// Obsolete, should be removed
-
-bool plDXPipeline::EndDrawable( plDrawable *d )
-{
-    return true;
-}
-
 // IMakeLightLists ///////////////////////////////////////////////////////////
 // Look through all the current lights, and fill out two lists.
 // Only active lights (not disabled, not exactly black, and not
