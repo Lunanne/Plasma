@@ -88,7 +88,7 @@ void plPipelineViewSettings::Reset(pl3DPipeline* pipeline)
     const uint16_t kCullMaxNodes = 250;
     fCullTree.Reset();
     fCullTreeDirty = true;
-    fCullMaxNodes = kCullMaxNodes;
+    fMaxCullNodes = kCullMaxNodes;
 
     // Object Local to world transform and its inverse.
     fLocalToWorld.Reset();
@@ -194,13 +194,13 @@ void plPipelineViewSettings::RefreshCullTree()
         fCullTree.InitFrustum(fTransform.GetWorldToNDC());
         fCullTreeDirty = false;
 
-        if (fCullMaxNodes)
+        if (fMaxCullNodes)
         {
             int i;
             for (i = 0; i < fCullPolys.GetCount(); i++)
             {
                 fCullTree.AddPoly(*fCullPolys[i]);
-                if (fCullTree.GetNumNodes() >= fCullMaxNodes)
+                if (fCullTree.GetNumNodes() >= fMaxCullNodes)
                     break;
             }
             fCullPolys.SetCount(0);

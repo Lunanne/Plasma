@@ -77,10 +77,17 @@ protected:
     hsColorRGBA                 fClearColor;
     float                       fClearDepth;
 
+    plViewTransform             fTransform;
+
+    hsMatrix44              fLocalToWorld;
+    hsMatrix44              fWorldToLocal;
+
     // Occluder & Culling stuff
     hsTArray<const plCullPoly*> fCullPolys;
     hsTArray<const plCullPoly*> fCullHoles;
     plDrawableSpans*            fCullProxy;
+
+    uint16_t                fMaxCullNodes;
 
 public:
     uint32_t                fRenderState;
@@ -89,7 +96,6 @@ public:
 
     plCullTree              fCullTree;
     bool                    fCullTreeDirty;
-    uint16_t                fCullMaxNodes;
 
     enum XformResets
     {
@@ -106,13 +112,8 @@ public:
 
     mutable bool            fViewVectorsDirty;
 
-    hsMatrix44              fLocalToWorld;
-    hsMatrix44              fWorldToLocal;
-
     const hsMatrix44&       GetLocalToWorld() const { return fLocalToWorld; }
     const hsMatrix44&       GetWorldToLocal() const { return fWorldToLocal; }
-
-    plViewTransform         fTransform;
 
     const hsMatrix44&       GetWorldToCamera() const { return fTransform.GetWorldToCamera(); }
     const hsMatrix44&       GetCameraToWorld() const { return fTransform.GetCameraToWorld(); }
@@ -126,10 +127,15 @@ public:
     bool                    HasCullProxy() const { return fCullProxy != nullptr; }
     plDrawableSpans*        GetCullProxy() const { return fCullProxy; }
 
-    plFogEnvironment&       GetDefaultFog() { return fDefaultFog; }
+    uint16_t                GetMaxCullNodes() const { return fMaxCullNodes; }
+    void                    SetMaxCullNodes(uint16_t max) { fMaxCullNodes = max; }
+
+    const plFogEnvironment& GetDefaultFog() const { return fDefaultFog; }
 
     hsColorRGBA             GetClearColor() const { return fClearColor; }
     float                   GetClearDepth() const { return fClearDepth; }
+
+    const plViewTransform&  GetViewTransform() const { return fTransform; }
 
     uint32_t                GetDrawableTypeMask() const { return fDrawableTypeMask; }
     void                    SetDrawableTypeMask(uint32_t mask) { fDrawableTypeMask = mask; }
