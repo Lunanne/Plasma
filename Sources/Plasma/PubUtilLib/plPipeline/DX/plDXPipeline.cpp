@@ -5200,9 +5200,7 @@ void plDXPipeline::ClearRenderTarget( plDrawable* d )
     fView.fDrawableTypeMask = plDrawable::kNormal;
     fView.fSubDrawableTypeMask = uint32_t(-1);
 
-    BeginDrawable(d);
     Draw(d);
-    EndDrawable(d);
 
     fView.fSubDrawableTypeMask = sdtm;
     fView.fDrawableTypeMask = dtm;
