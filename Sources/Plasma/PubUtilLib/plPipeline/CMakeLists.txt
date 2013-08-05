@@ -10,7 +10,6 @@ endif(WIN32)
 
 set(plPipeline_SOURCES
     hsG3DDeviceSelector.cpp
-    hsGColorizer.cpp
     pl3DPipeline.cpp
     plCaptureRender.cpp
     plCubicRenderTargetModifier.cpp
@@ -49,7 +48,6 @@ set(plGLPipeline_SOURCES
 set(plPipeline_HEADERS
     hsFogControl.h
     hsG3DDeviceSelector.h
-    hsGColorizer.h
     hsGDeviceRef.h
     hsWinRef.h
     pl3DPipeline.h
