@@ -326,8 +326,6 @@ protected:
 
     void            IBeginAllocUnManaged();
     void            IEndAllocUnManaged();
-    void            ICheckTextureUsage();
-    void            ICheckVtxUsage();
     inline void     ICheckVBUsage(plDXVertexBufferRef* vRef);
 
     bool            IRefreshDynVertices(plGBufferGroup* group, plDXVertexBufferRef* vRef);
@@ -468,9 +466,6 @@ protected:
     void    IShowErrorMessage( char *errStr = nil );
     bool    ICreateFail( char *errStr );
 
-    // FPU mode check
-    void    IFPUCheck();
-
     // Device initialization
     void    IInvalidateState();
     void    IInitDeviceState();
@@ -513,7 +508,6 @@ protected:
     void            IProjectionMatrixToD3D();
     void            IWorldToCameraToD3D();
     void            ILocalToWorldToD3D();
-    void            ISavageYonHack();
     void            ISetLocalToWorld( const hsMatrix44& l2w, const hsMatrix44& w2l );
     void            ISetCullMode(bool flip=false);
     bool inline   IIsViewLeftHanded();
