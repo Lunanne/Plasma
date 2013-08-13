@@ -1,8 +1,8 @@
-#include <gtest/gtest.h>
 #include <plString.h>
+#include <gtest/gtest.h>
 #include <wchar.h>
 #include <Windows.h>
-#include <hsMatrix44.h>
+
 
 
 
@@ -46,8 +46,7 @@
 
 TEST(PlStringTest,Format)
 {
-	hsMatrix44 mat= hsMatrix44();	
-	mat.fMap[0][0]; 
+	
     //string <256 characters
     plString expected1 = plString("abcd3");
     plString output1 = plString::Format("a%c%s%d",'b',"cd",3);
@@ -89,11 +88,11 @@ TEST(PlStringTest,FindChar)
     plString input1 = plString("abCdcBÁèab");
     //available accented char, case sensitive
     result = input1.Find('Á',plString::kCaseSensitive);
-    EXPECT_EQ(6,result);
+    EXPECT_EQ(7,result);
 
     //available accented char, case insensitive
     result = input1.Find('è',plString::kCaseInsensitive);
-    EXPECT_EQ(7,result);
+    EXPECT_EQ(9,result);
 }
 
 TEST(PlStringTest,FindLast)
@@ -121,11 +120,11 @@ TEST(PlStringTest,FindLast)
 	plString input1 = plString("éeÉß");
     //available accented char, case sensitive
     result = input1.FindLast('e',plString::kCaseSensitive);
-    EXPECT_EQ(1,result);
+    EXPECT_EQ(2,result);
 
     //available accented char, case insensitive
     result = input1.FindLast('ß',plString::kCaseInsensitive);
-    EXPECT_EQ(3,result);
+    EXPECT_EQ(6,result);
 }
 
 TEST(PlStringTest,FindString)
@@ -207,7 +206,6 @@ TEST(PlStringTest,Substr)
 
     //start<0 
     plString output1 =input.Substr(-3,3);
-	std::cout<<output1.c_str()<<std::endl;
     plString expected1 = plString("fgh");
     EXPECT_EQ(expected1,output1);
 
