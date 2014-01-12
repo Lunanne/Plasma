@@ -240,11 +240,10 @@ TEST(PlStringTest,Replace)
 
 TEST(PlStringTest,ToUpper)
 {    
-    plString input1 = plString("é");
-    /*plString input = plString("abCDè");
+    plString input = plString("abCDe");
     plString output = input.ToUpper();
-    plString expected = plString("ABCDÈ");
-    EXPECT_EQ(expected,output);*/
+    plString expected = plString("ABCDE");
+    EXPECT_EQ(expected,output);
 }
 
 TEST(PlStringTest,ToLower)
@@ -262,9 +261,9 @@ TEST(PlStringTest,Tokenize)
     expected.push_back(plString("b"));
     expected.push_back(plString("c"));
     expected.push_back(plString("d"));
-    //expected.push_back(plString("è"));
+    expected.push_back(plString("è"));
 
-    plString input = plString("a\t\tb\n;c-d");
+    plString input = plString("a\t\tb\n;c-d;è");
     std::vector<plString> output = input.Tokenize("\t\n-;");
     EXPECT_EQ(expected,output);
 
@@ -277,9 +276,9 @@ TEST(PlStringTest,Split)
     expected.push_back(plString("b"));
     expected.push_back(plString("c"));
     expected.push_back(plString("d"));
-    //expected.push_back(plString("è"));
+    expected.push_back(plString("è"));
 
-    plString input = plString("a-b-c-d");
+    plString input = plString("a-b-c-d-è");
     std::vector<plString> output = input.Split("-",4);
     EXPECT_EQ(expected,output);
 
