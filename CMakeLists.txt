@@ -97,7 +97,7 @@ endif(PLASMA_TARGETS STREQUAL "Ethereal")
 option(PLASMA_BUILD_RESOURCE_DAT "Do we want to build resource.dat?" ON)
 option(PLASMA_BUILD_LAUNCHER "Do we want to build plUruLauncher?" ON)
 option(PLASMA_BUILD_TOOLS "Do we want to build the Plasma tools?" ON)
-
+option(PLASMA_BUILD_TESTS "Do we want to build the unit tests?" OFF)
 option(USE_VLD "Build and link with Visual Leak Detector (MSVC only)" OFF)
 if(USE_VLD)
     add_definitions(-DUSE_VLD)
@@ -123,4 +123,7 @@ include_directories(${OPENSSL_INCLUDE_DIR})
 
 add_subdirectory(Sources/Plasma)
 add_subdirectory(Sources/Tools)
-add_subdirectory(Sources/Tests)
+
+if(PLASMA_BUILD_TESTS)
+    add_subdirectory(Sources/Tests)
+endif(PLASMA_BUILD_TESTS)
