@@ -893,7 +893,7 @@ bool plClient::IHandleMovieMsg(plMovieMsg* mov)
     // If a movie has lost its filename, it means something went horribly wrong
     // with playing it and it has shutdown. Or we just stopped it. Either way, 
     // we need to clear it out of our list.
-    if (fMovies[i]->GetFileName().IsEmpty())
+    if (!fMovies[i]->GetFilename().IsValid())
     {
         delete fMovies[i];
         fMovies.Remove(i);
