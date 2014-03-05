@@ -1836,7 +1836,8 @@ void plClient::IServiceMovies()
     int i;
     for( i = 0; i < fMovies.GetCount(); i++ )
     {
-        hsAssert(!fMovies[i]->GetFileName().IsEmpty(), "Lost our movie");
+		plFileName temp = fMovies[i]->GetFilename();
+        hsAssert(temp.IsValid(), "Lost our movie");
         if( !fMovies[i]->NextFrame() )
         {
             delete fMovies[i];

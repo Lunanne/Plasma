@@ -172,7 +172,8 @@ public:
         while ((valid = PeekNextBlockEntry(p->fSegment)))
         {
             const mkvparser::Block* blk = blk_entry->GetBlock();
-            if (blk->GetTime(blk_entry->GetCluster()) <= movieTime)
+            long long blockTimeMs = blk->GetTime(blk_entry->GetCluster())/p->fSegment->GetInfo()->GetTimeCodeScale();
+            if (blockTimeMs <= movieTime)
             {
                 frames.reserve(frames.size() + blk->GetFrameCount());
                 for (int32_t i = 0; i < blk->GetFrameCount(); ++i)
@@ -254,8 +255,8 @@ plMoviePlayer::~plMoviePlayer()
 
 int64_t plMoviePlayer::GetMovieTime() const
 {
-    return ((int64_t)hsTimer::GetSeconds() * fTimeScale) - fStartTime;
-}
+    return (int64_t)hsTimer::GetMilliSeconds() - fStartTime;
+}   
 
 bool plMoviePlayer::IOpenMovie()
 {
@@ -383,7 +384,7 @@ bool plMoviePlayer::NextFrame()
     // Get our current timecode
     int64_t movieTime = 0;
     if (fStartTime == 0)
-        fStartTime = static_cast<int64_t>((hsTimer::GetSeconds() * fTimeScale));
+        fStartTime = static_cast<int64_t>(hsTimer::GetMilliSeconds());
     else
         movieTime = GetMovieTime();
 
