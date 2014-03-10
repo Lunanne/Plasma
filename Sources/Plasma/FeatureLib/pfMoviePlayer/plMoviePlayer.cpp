@@ -142,9 +142,14 @@ class TrackMgr
             {
                 SAFE_OP(cluster->GetNext(blk_entry, blk_entry), "get next block");
             }
-            else
+            else if (cluster->m_pSegment != NULL)
             {
                 SAFE_OP(cluster->GetFirst(blk_entry), "get first block");
+            }
+            else
+            {
+                blk_entry = nullptr;
+                return false; //reached end of movie. I hope.
             }
 
             if (blk_entry)
@@ -179,8 +184,7 @@ public:
         while (valid = PeekNextBlockEntry(p->fSegment))
         {
             const mkvparser::Block* blk = blk_entry->GetBlock();
-            long long blockTimeMs = blk->GetTime(blk_entry->GetCluster())/p->fSegment->GetInfo()->GetTimeCodeScale();
-            if (blockTimeMs <= movieTime)
+            if (blk->GetTime(blk_entry->GetCluster()) <= movieTime)
             {
                 frames.reserve(frames.size() + blk->GetFrameCount());
                 for (int32_t i = 0; i < blk->GetFrameCount(); ++i)
@@ -244,8 +248,7 @@ plMoviePlayer::plMoviePlayer() :
     fTexture(nullptr),
     fReader(nullptr),
     fTimeScale(0), 
-    fStartTime(0),
-    fPlaying(false)
+    fStartTime(0)
 {
     fScale.Set(1.0f, 1.0f);
 }
@@ -361,28 +364,25 @@ bool plMoviePlayer::IProcessVideoFrame(const std::vector<blkbuf_t>& frames)
 bool plMoviePlayer::Start()
 {
 #ifdef VPX_AVAILABLE
-    if (!fPlaying)
-    {
-        if (!IOpenMovie())
-            return false;
-        hsAssert(fVideoTrack, "nil video track -- expect bad things to happen!");
+    if (!IOpenMovie())
+        return false;
+    hsAssert(fVideoTrack, "nil video track -- expect bad things to happen!");
 
-        // Initialize VP8
-        if (VPX* vpx = VPX::Create())
-            fVpx.reset(vpx);
-        else
-            return false;
+    // Initialize VP8
+    if (VPX* vpx = VPX::Create())
+        fVpx.reset(vpx);
+    else
+        return false;
 
-        // Need to figure out scaling based on pipe size.
-        plPlateManager& plateMgr = plPlateManager::Instance();
-        const mkvparser::VideoTrack* video = static_cast<const mkvparser::VideoTrack*>(fSegment->GetTracks()->GetTrackByNumber(fVideoTrack->number));
-        float width = (static_cast<float>(video->GetWidth()) / static_cast<float>(plateMgr.GetPipeWidth())) * fScale.fX;
-        float height = (static_cast<float>(video->GetHeight()) / static_cast<float>(plateMgr.GetPipeHeight())) * fScale.fY;
+    // Need to figure out scaling based on pipe size.
+    plPlateManager& plateMgr = plPlateManager::Instance();
+    const mkvparser::VideoTrack* video = static_cast<const mkvparser::VideoTrack*>(fSegment->GetTracks()->GetTrackByNumber(fVideoTrack->number));
+    float width = (static_cast<float>(video->GetWidth()) / static_cast<float>(plateMgr.GetPipeWidth())) * fScale.fX;
+    float height = (static_cast<float>(video->GetHeight()) / static_cast<float>(plateMgr.GetPipeHeight())) * fScale.fY;
 
-        plateMgr.CreatePlate(&fPlate, fPosition.fX, fPosition.fY, width, height);
-        fPlate->SetVisible(true);
-        fTexture = fPlate->CreateMaterial(static_cast<uint32_t>(video->GetWidth()), static_cast<uint32_t>(video->GetHeight()), nullptr);
-    }
+    plateMgr.CreatePlate(&fPlate, fPosition.fX, fPosition.fY, width, height);
+    fPlate->SetVisible(true);
+    fTexture = fPlate->CreateMaterial(static_cast<uint32_t>(video->GetWidth()), static_cast<uint32_t>(video->GetHeight()), nullptr);
     return true;
 #else
     return false;
