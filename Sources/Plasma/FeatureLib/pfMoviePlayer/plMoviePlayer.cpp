@@ -507,7 +507,11 @@ bool plMoviePlayer::IProcessAudioFrame(const std::vector<blkbuf_t>& frames)
     return true;
 }
 
-void plMoviePlayer::Stop()
+bool plMoviePlayer::Stop()
 {
-    fPlaying = false;
+    fplaying = false;
+    for (int i = 0; i < fCallbacks.GetCount(); i++)
+        fCallbacks[i]->Send();
+    fCallbacks.Reset();
+    return false;
 }

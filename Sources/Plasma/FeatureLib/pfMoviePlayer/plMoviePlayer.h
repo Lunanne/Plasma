@@ -103,7 +103,7 @@ public:
     bool Start();
     bool NextFrame();
 
-    void Stop();
+    bool Stop();
 
     plFileName GetFilename() const { return fMoviePath; }
     void SetFilename(const plFileName& filename) { fMoviePath = filename; }
@@ -115,6 +115,13 @@ public:
     hsPoint2 GetScale() const { return fScale; }
     void SetScale(const hsPoint2& scale) { fScale = scale; }
     void SetScale(float x, float y) { fScale.Set(x, y); }
+
+    void AddCallback(plMessage* msg) { hsRefCnt_SafeRef(msg); fCallbacks.Append(msg); }
+    uint32_t GetNumCallbacks() const { return 0; }
+    plMessage* GetCallback(int i) const { return nullptr; }
+
+private:
+    hsTArray<plMessage*> fCallbacks;
 };
 
 #endif // _plMoviePlayer_inc
