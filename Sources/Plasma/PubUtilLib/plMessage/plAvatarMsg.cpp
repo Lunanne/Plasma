@@ -41,17 +41,16 @@ You can contact Cyan Worlds, Inc. by email legal@cyan.com
 *==LICENSE==*/
 #ifndef NO_AV_MSGS
 
+#include "hsResMgr.h"
+#pragma hdrstop
+
 #include "plAvatarMsg.h"
 
-#include "hsResMgr.h"
-
-#include "pnKeyedObject/plKey.h"
+#include "plMessage/plOneShotCallbacks.h"
 #include "pnSceneObject/plSceneObject.h"
 
-#include "plMessage/plOneShotCallbacks.h"
-
 #ifndef SERVER
-#include "plAvatar/plAvBrain.h"
+#   include "plAvatar/plAvBrain.h"
 #endif
 
 
@@ -174,12 +173,13 @@ void plAvTaskMsg::Write(hsStream *stream, hsResMgr *mgr)
 // CTOR()
 plAvSeekMsg::plAvSeekMsg()
 : plAvTaskMsg(),
-  fSeekPoint(nil),
+  fSeekPoint(nullptr),
   fDuration(0),
   fSmartSeek(true),
   fAlignType(kAlignHandle),
   fNoSeek(false),
-  fFlags(kSeekFlagForce3rdPersonOnStart)
+  fFlags(kSeekFlagForce3rdPersonOnStart),
+  fFinishMsg(nullptr)
 {
 }
 
@@ -198,7 +198,8 @@ plAvSeekMsg::plAvSeekMsg(const plKey& sender, const plKey& receiver,
   fAlignType(alignType),
   fNoSeek(noSeek),
   fFlags(flags),
-  fFinishKey(finishKey)
+  fFinishKey(finishKey),
+  fFinishMsg(nullptr)
 {
 }
 
@@ -313,7 +314,7 @@ void plAvOneShotMsg::Read(hsStream *stream, hsResMgr *mgr)
 {
     plAvSeekMsg::Read(stream, mgr);
 
-    fAnimName = stream->ReadSafeString_TEMP();
+    fAnimName = stream->ReadSafeString();
     fDrivable = stream->ReadBool();
     fReversible = stream->ReadBool();
 }

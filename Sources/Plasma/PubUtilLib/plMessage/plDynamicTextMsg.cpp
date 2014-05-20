@@ -47,9 +47,11 @@ You can contact Cyan Worlds, Inc. by email legal@cyan.com
 //////////////////////////////////////////////////////////////////////////////
 
 #include "HeadSpin.h"
-#include "plDynamicTextMsg.h"
-#include "hsResMgr.h"
 #include "hsBitVector.h"
+#include "hsResMgr.h"
+#pragma hdrstop
+
+#include "plDynamicTextMsg.h"
 
 void    plDynamicTextMsg::SetTextColor( hsColorRGBA &c, bool blockRGB )
 {
@@ -216,7 +218,7 @@ void    plDynamicTextMsg::Read( hsStream *s, hsResMgr *mgr )
     fClearColor.Read( s );
     fColor.Read( s );
 
-    fString = s->ReadSafeWString_TEMP();
+    fString = s->ReadSafeWString();
     fImageKey = mgr->ReadKey( s );
 
     s->ReadLE( &fFlags );
@@ -301,7 +303,7 @@ void plDynamicTextMsg::ReadVersion(hsStream* s, hsResMgr* mgr)
     if (contentFlags.IsBitSet(kDynTextMsgColor))
         fColor.Read( s );
     if (contentFlags.IsBitSet(kDynTextMsgString))
-        fString = s->ReadSafeWString_TEMP();
+        fString = s->ReadSafeWString();
     if (contentFlags.IsBitSet(kDynTextMsgImageKey))
         fImageKey = mgr->ReadKey( s );
     if (contentFlags.IsBitSet(kDynTextMsgFlags))

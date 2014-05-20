@@ -39,45 +39,38 @@ You can contact Cyan Worlds, Inc. by email legal@cyan.com
       Mead, WA   99021
 
 *==LICENSE==*/
-#include "hsCodecManager.h"
-#include "plMipmap.h"
+#ifndef _plResBrowser_h
+#define _plResBrowser_h
 
+#include <QMainWindow>
 
-hsCodecManager& hsCodecManager::Instance()
+class plResBrowser : public QMainWindow
 {
-    static hsCodecManager the_instance;
-    static bool initialized = false;
+    Q_OBJECT
 
-    if (!initialized)
-    {
-        initialized = true;
-    }
+public:
+    plResBrowser();
+    virtual ~plResBrowser();
 
-    return the_instance;
-}
+    void SetWindowTitle(const QString &title);
 
-hsCodecManager::hsCodecManager()
-{
-}
+protected:
+    virtual void dragEnterEvent(QDragEnterEvent *event) override;
+    virtual void dropEvent(QDropEvent *event) override;
 
-plMipmap *hsCodecManager::CreateCompressedMipmap(uint32_t compressionFormat, plMipmap *uncompressed)
-{
-    return nil;
-}
+private slots:
+    void OpenFile();
+    void OpenDirectory();
+    void SaveSelectedObject();
+    void RefreshTree();
+    void UpdateInfoPage();
 
-plMipmap *hsCodecManager::CreateUncompressedMipmap(plMipmap *compressed, uint8_t bitDepth)
-{
-    return nil;
+private:
+    class Ui_ResBrowser *fUI;
 
-}
+    void RegisterFileTypes();
+    void LoadPrpFile(const QString &fileName);
+    void LoadResourcePath(const QString &path);
+};
 
-bool hsCodecManager::ColorizeCompMipmap( plMipmap *bMap, const uint8_t *colorMask )
-{
-    return false;
-}
-
-bool hsCodecManager::Register(hsCodec *codec, uint32_t compressionFormat, hsScalar priority)
-{
-    return true;
-}
-
+#endif

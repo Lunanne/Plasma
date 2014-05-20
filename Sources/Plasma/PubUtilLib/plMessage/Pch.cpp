@@ -39,27 +39,5 @@ You can contact Cyan Worlds, Inc. by email legal@cyan.com
       Mead, WA   99021
 
 *==LICENSE==*/
-#ifndef HS_SAFE_REF_CNT_H
-#define HS_SAFE_REF_CNT_H
 
-#include "hsRefCnt.h"
-#include "hsThread.h"
-
-//
-// Thread Safe RefCounter
-//
-
-class hsSafeRefCnt : public hsRefCnt
-{
-private:
-    static hsMutex fMutex;
-protected:
-    virtual void IRef() { } 
-    virtual void IUnRef() { }; 
-public:
-    virtual int RefCnt() const { hsTempMutexLock temp(fMutex); return hsRefCnt::RefCnt(); }
-    void UnRef() { hsTempMutexLock temp(fMutex); IUnRef(); hsRefCnt::UnRef(); }
-    void Ref() { hsTempMutexLock temp(fMutex); IRef(); hsRefCnt::Ref(); }
-};
-
-#endif //HS_SAFE_REF_CNT_H
+#include "Pch.h"

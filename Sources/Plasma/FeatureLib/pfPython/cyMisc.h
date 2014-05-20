@@ -218,7 +218,7 @@ public:
     //
     //  PURPOSE    : set the Python modifier to be dirty and asked to be saved out
     //
-    static void SetDirtySyncState(pyKey &selfkey, const char* SDLStateName, uint32_t sendFlags);
+    static void SetDirtySyncState(pyKey &selfkey, const plString& SDLStateName, uint32_t sendFlags);
 
     /////////////////////////////////////////////////////////////////////////////
     //
@@ -228,7 +228,7 @@ public:
     //  PURPOSE    : set the Python modifier to be dirty and asked to be saved out
     //                  specifies that state should be sent to other clients as well as server
     //
-    static void SetDirtySyncStateWithClients(pyKey &selfkey, const char* SDLStateName, uint32_t sendFlags);
+    static void SetDirtySyncStateWithClients(pyKey &selfkey, const plString& SDLStateName, uint32_t sendFlags);
 
     /////////////////////////////////////////////////////////////////////////////
     //
@@ -301,7 +301,7 @@ public:
     //
     static const char* GetAgeName();
     static PyObject* GetAgeInfo(); // returns pyAgeInfoStruct
-    static const char* GetPrevAgeName();
+    static plString GetPrevAgeName();
     static PyObject* GetPrevAgeInfo();
     // current time in current age
     static uint32_t GetAgeTime( void );

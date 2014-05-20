@@ -209,11 +209,11 @@ plFileInfo::plFileInfo(const plFileName &filename)
 
 #if HS_BUILD_FOR_WIN32
     struct __stat64 info;
-    if (!_wstat64(filename.AsString().ToWchar(), &info) == 0)
+    if (_wstat64(filename.AsString().ToWchar(), &info) != 0)
         return;
 #else
     struct stat info;
-    if (!stat(filename.AsString().c_str(), &info) == 0)
+    if (stat(filename.AsString().c_str(), &info) != 0)
         return;
 #endif
 
@@ -394,7 +394,7 @@ std::vector<plFileName> plFileSystem::ListDir(const plFileName &path, const char
             continue;
         }
 
-        if (pattern && pattern[0] && fnmatch(pattern, de->d_name, 0))
+        if (pattern && pattern[0] && fnmatch(pattern, de->d_name, 0) == 0)
             contents.push_back(dir_name);
         else if (!pattern || !pattern[0])
             contents.push_back(dir_name);
@@ -537,37 +537,6 @@ plFileName plFileSystem::GetCurrentAppPath()
         return appPath;
 
     hsAssert(0, "Your OS doesn't make life easy, does it?");
-#endif
-}
-
-plFileName plFileSystem::GetTempFilename(const char *prefix, const plFileName &path)
-{
-#if HS_BUILD_FOR_WIN32
-    // GetTempFileName() never uses more than 3 chars for the prefix
-    wchar_t wprefix[4];
-    for (size_t i=0; i<4; ++i)
-        wprefix[i] = prefix[i];
-    wprefix[3] = 0;
-
-    wchar_t temp[MAX_PATH];
-    if (GetTempFileNameW(path.AsString().ToWchar(), wprefix, 0, temp))
-        return plString::FromWchar(temp);
-
-    return "";
-#else
-    plFileName tmpdir = path;
-    if (!tmpdir.IsValid())
-        tmpdir = "/tmp";
-
-    // "/tmp/prefixXXXXXX"
-    size_t temp_len = tmpdir.GetSize() + strlen(prefix) + 7;
-    char *temp = new char[temp_len + 1];
-    snprintf(temp, temp_len + 1, "%s/%sXXXXXX", tmpdir.AsString().c_str(), prefix);
-    mktemp(temp);
-    plFileName result = temp;
-    delete [] temp;
-
-    return result;
 #endif
 }
 

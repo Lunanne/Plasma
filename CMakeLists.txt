@@ -40,21 +40,21 @@ find_package(OpenAL REQUIRED)
 find_package(PythonLibs REQUIRED)
 find_package(EXPAT REQUIRED)
 find_package(ZLIB REQUIRED)
+find_package(JPEG REQUIRED)
 find_package(PNG REQUIRED)
 find_package(Ogg REQUIRED)    #TODO: Not required if we aren't building the client
 find_package(Vorbis REQUIRED) #TODO: Not required if we aren't building the client
 find_package(Speex REQUIRED)  #TODO: Not required if we aren't building the client
 find_package(CURL REQUIRED)
+find_package(Freetype)
 
 if(WIN32)
     find_package(PhysX REQUIRED)  #TODO: Not required if we aren't building the client
     find_package(DirectX REQUIRED)
-    find_package(Freetype)
 endif(WIN32)
 
-find_package(MaxSDK)          #TODO: Only find this if we are building PlasmaMax
 find_package(Bink)            #TODO: Find Bink, but don't require it if plPipeline isn't built...
-#                                    Or better yet, just eliminate bink altogether
+                              #      Or better yet, just eliminate bink altogether
 include(PrecompiledHeader)    #Precompiled Header helper macros
 
 # libCurl isn't smart enough to detect this for us, so we have to configure it ourselves
@@ -62,6 +62,9 @@ option(CURL_IS_STATIC "Using the static version of libcurl?" ON)
 if(CURL_IS_STATIC)
     add_definitions(-DCURL_STATICLIB)
 endif(CURL_IS_STATIC)
+
+# Same story for expat
+option(EXPAT_IS_STATIC "Using the static version of libexpat" ON)
 
 option(PLASMA_EXTERNAL_RELEASE "Is this release intended for the general public?" OFF)
 if(PLASMA_EXTERNAL_RELEASE)
@@ -98,6 +101,13 @@ option(PLASMA_BUILD_RESOURCE_DAT "Do we want to build resource.dat?" ON)
 option(PLASMA_BUILD_LAUNCHER "Do we want to build plUruLauncher?" ON)
 option(PLASMA_BUILD_TOOLS "Do we want to build the Plasma tools?" ON)
 option(PLASMA_BUILD_TESTS "Do we want to build the unit tests?" OFF)
+
+option(3dsm_BUILD_PLUGIN "Do we want to build the 3ds Max plugin?" OFF)
+if(3dsm_BUILD_PLUGIN)
+    find_package(MaxSDK REQUIRED)
+    add_definitions(-DBUILDING_MAXPLUGIN)
+endif(3dsm_BUILD_PLUGIN)
+
 option(USE_VLD "Build and link with Visual Leak Detector (MSVC only)" OFF)
 if(USE_VLD)
     add_definitions(-DUSE_VLD)
@@ -114,8 +124,8 @@ else()
 endif()
 
 if(MSVC)
-    add_definitions(-D_CRT_SECURE_NO_WARNINGS)
-    add_definitions(-D_SCL_SECURE_NO_WARNINGS)
+    add_definitions(-D_CRT_SECURE_NO_DEPRECATE)
+    add_definitions(-D_SCL_SECURE_NO_DEPRECATE)
 endif(MSVC)
 
 #TODO: Make the OpenSSL includes less promiscuous so this isn't needed
