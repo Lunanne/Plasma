@@ -130,8 +130,6 @@ protected:
     bool                                fVSync;
 
 
-    friend class DeviceType;
-
 public:
     pl3DPipeline(const hsG3DDeviceModeRecord* devModeRec);
     virtual ~pl3DPipeline();

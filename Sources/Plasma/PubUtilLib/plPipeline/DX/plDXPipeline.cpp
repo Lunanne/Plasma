@@ -367,6 +367,10 @@ plProfile_CreateCounter("AvRTPoolCount", "PipeC", AvRTPoolCount);
 plProfile_CreateCounter("AvRTPoolRes", "PipeC", AvRTPoolRes);
 plProfile_CreateCounter("AvRTShrinkTime", "PipeC", AvRTShrinkTime);
 
+static const float kPerspLayerScale = 0.00001f;
+static const float kPerspLayerScaleW = 0.001f;
+static const float kPerspLayerTrans = 0.00002f;
+
 #ifndef PLASMA_EXTERNAL_RELEASE
 /// Fun inlines for keeping track of surface creation/deletion memory
 void D3DSURF_MEMNEW(IDirect3DSurface9* surf)
@@ -580,6 +584,7 @@ plDXPipeline::plDXPipeline( hsWinRef hWnd, const hsG3DDeviceModeRecord *devModeR
 
     /// Init our screen mode
     fDevice.fHWnd = hWnd;
+    fDevice.fPipeline = this;
 
     if( devRec->GetAASetting() == 0 )
         fSettings.fNumAASamples = 0;
@@ -3158,7 +3163,7 @@ bool plDXPipeline::BeginRender()
         fD3DDevice->SetRenderState( D3DRS_ZENABLE, D3DZB_TRUE );
 
         /// If we have a renderTarget active, use its viewport
-        ISetViewport();
+        fDevice.SetViewport();
 
         // Tell D3D we're ready to start rendering.
         if( FAILED(fD3DDevice->BeginScene()) )
@@ -3186,19 +3191,6 @@ bool plDXPipeline::BeginRender()
     return false;
 }
 
-//// ISetViewport /////////////////////////////////////////////////////////////
-// Translate our viewport into a D3D viewport
-/*void    plDXPipeline::ISetViewport()
-{
-    D3DVIEWPORT9 vp = { GetViewTransform().GetViewPortLeft(),
-                        GetViewTransform().GetViewPortTop(),
-                        GetViewTransform().GetViewPortWidth(),
-                        GetViewTransform().GetViewPortHeight(),
-                        0.f, 1.f };
-
-    
-    WEAK_ERROR_CHECK( fD3DDevice->SetViewport( &vp ) );
-}*/
 
 //// RenderScreenElements /////////////////////////////////////////////////////
 //  Renders all the screen elements, such as debug text and plates. Also puts
@@ -11354,7 +11346,7 @@ bool plDXPipeline::IPushShadowCastState(plShadowSlave* slave)
 
     // Bring the viewport in (AFTER THE CLEAR) to protect the alpha boundary.
     fView.GetViewTransform().SetViewPort(1, 1, (float)(slave->fWidth-2), (float)(slave->fHeight-2), false);
-    ISetViewport();
+    fDevice.SetViewport();
 
     inlEnsureLightingOff();
 
