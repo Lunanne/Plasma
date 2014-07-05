@@ -96,6 +96,8 @@ protected:
     int32_t                             fMatPiggyBacks;
     int32_t                             fActivePiggyBacks;
 
+    hsGDeviceRef*                       fLayerRef[8];
+
     hsGMaterial*                        fCurrMaterial;
 
     plLayerInterface*                   fCurrLay;
@@ -123,6 +125,7 @@ protected:
     uint32_t                            fOrigHeight;
     uint32_t                            fColorDepth;
 
+    uint32_t                            fInSceneDepth;
     double                              fTime;      // World time.
     uint32_t                            fFrame;     // inc'd every time the camera moves.
     uint32_t                            fRenderCnt; // inc'd every begin scene.
