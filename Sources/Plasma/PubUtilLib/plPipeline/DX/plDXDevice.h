@@ -72,6 +72,8 @@ public:
 public:
     plDXDevice();
 
+    bool InitDevice();
+
     /**
      * Set rendering to the specified render target.
      *

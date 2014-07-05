@@ -18,7 +18,6 @@ set(plPipeline_SOURCES
     plDTProgressMgr.cpp
     plDynamicEnvMap.cpp
     plFogEnvironment.cpp
-    plGBufferGroup.cpp
     plPipelineViewSettings.cpp
     plPlates.cpp
     plRenderTarget.cpp
@@ -26,7 +25,6 @@ set(plPipeline_SOURCES
     plTextFont.cpp
     plTextGenerator.cpp
     plTransitionMgr.cpp
-    plVertCoder.cpp
 )
 
 set(plDXPipeline_SOURCES
@@ -63,7 +61,6 @@ set(plPipeline_HEADERS
     plDTProgressMgr.h
     plDynamicEnvMap.h
     plFogEnvironment.h
-    plGBufferGroup.h
     plPipeDebugFlags.h
     plPipelineCreatable.h
     plPipelineCreate.h
@@ -75,7 +72,6 @@ set(plPipeline_HEADERS
     plTextFont.h
     plTextGenerator.h
     plTransitionMgr.h
-    plVertCoder.h
 )
 
 set(plDXPipeline_HEADERS
@@ -108,6 +104,15 @@ else()
     add_library(plPipeline STATIC ${plPipeline_SOURCES} ${plGLPipeline_SOURCES} ${plPipeline_HEADERS} ${plGLPipeline_HEADERS})
 endif()
 
+target_link_libraries(plPipeline CoreLib)
+target_link_libraries(plPipeline pnKeyedObject)
+#target_link_libraries(plPipeline pnNucleusInc)
+#target_link_libraries(plPipeline pnSceneObject)
+target_link_libraries(plPipeline plDrawable)
+#target_link_libraries(plPipeline plGLight)
+#target_link_libraries(plPipeline plScene)
+#target_link_libraries(plPipeline plSurface)
+
 source_group("Source Files" FILES ${plPipeline_SOURCES})
 source_group("Header Files" FILES ${plPipeline_HEADERS})
 
@@ -115,6 +120,8 @@ if(WIN32)
     source_group("DX\\Source Files" FILES ${plDXPipeline_SOURCES})
     source_group("DX\\Header Files" FILES ${plDXPipeline_HEADERS})
 else()
+    target_link_libraries(plPipeline EGL)
+
     source_group("GL\\Source Files" FILES ${plGLPipeline_SOURCES})
     source_group("GL\\Header Files" FILES ${plGLPipeline_HEADERS})
 endif()

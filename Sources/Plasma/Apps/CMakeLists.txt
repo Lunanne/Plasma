@@ -1,4 +1,5 @@
 add_subdirectory(plClient)
+add_subdirectory(plGLClient)
 add_subdirectory(plCrashHandler)
 
 if(PLASMA_BUILD_LAUNCHER)

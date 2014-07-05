@@ -112,7 +112,7 @@ You can contact Cyan Worlds, Inc. by email legal@cyan.com
 #include "plPipeline/plDebugText.h"
 #include "plPipeline/plFogEnvironment.h"
 #include "plDXTextFont.h"
-#include "plPipeline/plGBufferGroup.h"
+#include "plDrawable/plGBufferGroup.h"
 #include "hsTimer.h"
 #include "plgDispatch.h"
 #include "plScene/plRenderRequest.h"
@@ -319,9 +319,6 @@ plProfile_CreateCounter("Layer Change", "Draw", LayChange);
 
 plProfile_CreateCounterNoReset("Reload", "PipeC", PipeReload);
 
-plProfile_CreateTimer("RenderScene", "PipeT", RenderScene);
-plProfile_CreateTimer("VisEval", "PipeT", VisEval);
-plProfile_CreateTimer("VisSelect", "PipeT", VisSelect);
 plProfile_CreateTimer("PrepShadows", "PipeT", PrepShadows);
 plProfile_CreateTimer("PrepDrawable", "PipeT", PrepDrawable);
 plProfile_CreateTimer("  Skin", "PipeT", Skin);
