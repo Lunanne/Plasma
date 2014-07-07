@@ -666,8 +666,8 @@ plDXPipeline::~plDXPipeline()
 void    plDXPipeline::IClearMembers()
 {
     /// Clear some stuff
-    fVtxBuffRefList = nil;
-    fIdxBuffRefList = nil;
+    //fVtxBuffRefList = nil;
+    //fIdxBuffRefList = nil;
     fTextureRefList = nil;
     fTextFontRefList = nil;
     fRenderTargetRefList = nil;

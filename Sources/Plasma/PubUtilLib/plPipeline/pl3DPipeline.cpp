@@ -103,6 +103,8 @@ pl3DPipeline::pl3DPipeline(const hsG3DDeviceModeRecord* devModeRec)
     fOverAllLayer(nullptr),
     fMatPiggyBacks(0),
     fActivePiggyBacks(0),
+    fVtxBuffRefList(nullptr),
+    fIdxBuffRefList(nullptr),
     fCurrMaterial(nullptr),
     fCurrLay(nullptr),
     fCurrNumLayers(0),

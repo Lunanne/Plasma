@@ -56,9 +56,10 @@ plProfile_CreateMemCounter("Textures", "Memory", MemTexture);
  ** Generic plGLDeviceRef Functions                                         **
  *****************************************************************************/
 plGLDeviceRef::plGLDeviceRef()
+:   fNext(nullptr),
+    fBack(nullptr),
+    fRef(0)
 {
-    fNext = nullptr;
-    fBack = nullptr;
 }
 
 plGLDeviceRef::~plGLDeviceRef()
@@ -69,7 +70,7 @@ plGLDeviceRef::~plGLDeviceRef()
 
 void plGLDeviceRef::Unlink()
 {
-    hsAssert(fBack, "plDXDeviceRef not in list");
+    hsAssert(fBack, "plGLDeviceRef not in list");
 
     if (fNext)
         fNext->fBack = fBack;
@@ -81,7 +82,7 @@ void plGLDeviceRef::Unlink()
 
 void plGLDeviceRef::Link(plGLDeviceRef** back)
 {
-    hsAssert(fNext == nullptr && fBack == nullptr, "Trying to link a plDXDeviceRef that's already linked");
+    hsAssert(fNext == nullptr && fBack == nullptr, "Trying to link a plGLDeviceRef that's already linked");
 
     fNext = *back;
     if (*back)

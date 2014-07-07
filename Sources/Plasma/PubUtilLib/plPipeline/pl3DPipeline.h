@@ -96,6 +96,9 @@ protected:
     int32_t                             fMatPiggyBacks;
     int32_t                             fActivePiggyBacks;
 
+    DeviceType::VertexBufferRef*        fVtxBuffRefList;
+    DeviceType::IndexBufferRef*         fIdxBuffRefList;
+
     hsGDeviceRef*                       fLayerRef[8];
 
     hsGMaterial*                        fCurrMaterial;
