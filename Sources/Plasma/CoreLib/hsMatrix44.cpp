@@ -926,3 +926,13 @@ void hsMatrix44::Write(hsStream *stream)
                 stream->WriteLEFloat(fMap[i][j]);         
     }
 }
+
+
+PL_FORMAT_IMPL(const hsMatrix44&)
+{
+    return PL_FORMAT_FORWARD(format, plFormat("hsMatrix44[[{.4f}, {.4f}, {.4f}, {.4f}]; [{.4f}, {.4f}, {.4f}, {.4f}]; [{.4f}, {.4f}, {.4f}, {.4f}]; [{.4f}, {.4f}, {.4f}, {.4f}]]",
+                    value.fMap[0][0], value.fMap[0][1], value.fMap[0][2], value.fMap[0][3],
+                    value.fMap[1][0], value.fMap[1][1], value.fMap[1][2], value.fMap[1][3],
+                    value.fMap[2][0], value.fMap[2][1], value.fMap[2][2], value.fMap[2][3],
+                    value.fMap[3][0], value.fMap[3][1], value.fMap[3][2], value.fMap[3][3]));
+}
