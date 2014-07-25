@@ -68,7 +68,7 @@ protected:
 
     bool          fRegisteredForASysMsg, fAudibleInited;
 
-    void ISetAudible(plAudible* aud);
+   
     void IRemoveAudible(plAudible* aud);
     
     virtual void    ISetOwner(plSceneObject* owner);
@@ -104,6 +104,9 @@ public:
     virtual void    ReleaseData( void );
     void SetSoundFilename(int index, const char *filename, bool isCompressed);
     int GetSoundIndex(const char *keyname);
+
+    void ISetAudible(plAudible* aud);//All the hack
+    void GenerateKey();
 };
 
 

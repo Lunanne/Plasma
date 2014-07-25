@@ -97,8 +97,9 @@ hsMutex     plDispatch::fMsgDispatchLock; // mutex for IMsgDispatch
 
 
 plDispatch::plDispatch()
-: fOwner(nil), fFutureMsgQueue(nil), fQueuedMsgOn(true)
+: fOwner(nil), fFutureMsgQueue(nil), fQueuedMsgOn(true), fRegisteredExactTypes()
 {
+    fRegisteredExactTypes.Reset();
 }
 
 plDispatch::~plDispatch()
@@ -483,6 +484,7 @@ bool plDispatch::MsgSend(plMessage* msg, bool async)
                 int j;
                 for( j = 0; j < filt->fReceivers.GetCount(); j++ )
                 {
+                    plKey key = filt->fReceivers[j];
                     msgWrap->AddReceiver(filt->fReceivers[j]);
                 }
                 if( msg->HasBCastFlag(plMessage::kClearAfterBCast) )

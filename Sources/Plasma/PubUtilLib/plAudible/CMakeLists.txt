@@ -9,6 +9,7 @@ set(plAudible_SOURCES
     plAudibleNull.cpp
     plWinAudible.cpp
     plWinAudibleProxy.cpp
+    plVideoAudible.cpp
 )
 
 set(plAudible_HEADERS
@@ -16,6 +17,7 @@ set(plAudible_HEADERS
     plAudibleNull.h
     plWinAudible.h
     plWinAudibleProxy.h
+    plVideoAudible.h
 )
 
 add_library(plAudible STATIC ${plAudible_SOURCES} ${plAudible_HEADERS})

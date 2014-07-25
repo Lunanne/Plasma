@@ -5,6 +5,7 @@ include_directories(../../PubUtilLib)
 
 if (VPX_AVAILABLE)
     include_directories(${VPX_INCLUDE_DIR})
+    include_directories(${Opus_INCLUDE_DIR})
 endif (VPX_AVAILABLE)
 
 set(pfMoviePlayer_SOURCES
@@ -25,6 +26,7 @@ set(pfMoviePlayer_WEBM
 )
 
 add_library(pfMoviePlayer STATIC ${pfMoviePlayer_SOURCES} ${pfMoviePlayer_HEADERS} ${pfMoviePlayer_WEBM})
+
 
 source_group("Source Files" FILES ${pfMoviePlayer_SOURCES})
 source_group("Header Files" FILES ${pfMoviePlayer_HEADERS})

@@ -59,6 +59,7 @@ You can contact Cyan Worlds, Inc. by email legal@cyan.com
 #include "pnNetCommon/plNetApp.h"
 #include "hsTimer.h"
 
+static int uniqueID = 0;//used to generate key
 
 plAudioInterface::plAudioInterface()
 : fAudible(nil), fAudibleInited( false )
@@ -180,9 +181,13 @@ void plAudioInterface::ISetAudible(plAudible* aud)
             fAudible->SetSceneObject(fOwner->GetKey());
     }
 
+
+    if (!GetKey())
+        GenerateKey();
     plAudioSysMsg* pMsg = new plAudioSysMsg( plAudioSysMsg::kPing );
     pMsg->SetSender(GetKey());
 //  pMsg->SetBCastFlag(plMessage::kBCastByExactType, false);
+
     plgDispatch::MsgSend( pMsg );
 }
 
@@ -374,4 +379,10 @@ void plAudioInterface::ReleaseData()
         // Audible key is gone already, I guess the audioInterface doesn't have a ref -Colin
 //      GetKey()->Release(fAudible->GetKey());
     }
+}
+
+void plAudioInterface::GenerateKey()
+{
+    uniqueID++;
+   hsgResMgr::ResMgr()->NewKey(plString::Format("audiointerface#%d", uniqueID), this, plLocation::kGlobalFixedLoc);
 }

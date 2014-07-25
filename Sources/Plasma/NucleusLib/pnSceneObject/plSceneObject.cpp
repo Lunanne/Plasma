@@ -813,7 +813,7 @@ void plSceneObject::ISetAudioInterface(plAudioInterface* ai)
 { 
     if( fAudioInterface != ai )
     {
-        if( fAudioInterface )
+        if( fAudioInterface && fAudioInterface->GetAudible() != nullptr)
             fAudioInterface->ISetOwner(nil);
         fAudioInterface = ai;
         if( ai )

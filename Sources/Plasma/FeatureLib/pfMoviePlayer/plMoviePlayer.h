@@ -47,16 +47,22 @@ You can contact Cyan Worlds, Inc. by email legal@cyan.com
 #include "hsColorRGBA.h"
 #include "plFileSystem.h"
 #include "hsPoint2.h"
+#include "plAudio/plWin32VideoSound.h"
+#include "plAudible/plVideoAudible.h"
+#include "pnSceneObject/plAudioInterface.h"
 
 #include <memory>
 #include <vector>
 #include <tuple>
+
+#include <opus.h>
 
 namespace mkvparser
 {
     class BlockEntry;
     class MkvReader;
     class Segment;
+    class Track;
 }
 
 typedef std::tuple<std::unique_ptr<uint8_t>, int32_t> blkbuf_t;
@@ -78,9 +84,15 @@ protected:
     hsPoint2 fPosition, fScale;
     plFileName fMoviePath;
 
+    OpusDecoder* fOpusDecoder;
+    std::shared_ptr<plWin32VideoSound> fAudioSound;
+    plVideoAudible fAudioPlayer;
+    plAudioInterface fAudioInterface;
+
     int64_t GetMovieTime() const;
     bool IOpenMovie();
     bool IProcessVideoFrame(const std::vector<blkbuf_t>& frames);
+    bool IProcessAudioFrame(const std::vector<blkbuf_t>& frames);
 
 public:
     plMoviePlayer();

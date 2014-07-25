@@ -333,7 +333,7 @@ bool plDSoundBuffer::SetupStreamingSource(void *data, unsigned bytes)
         ALenum format = IGetALFormat(fBufferDesc->fBitsPerSample, fBufferDesc->fNumChannels);
         alBufferData( streamingBuffers[i], format, bufferData, size, fBufferDesc->fNumSamplesPerSec );
         if( (error = alGetError()) != AL_NO_ERROR )
-            plStatusLog::AddLineS("audio.log", "alBufferData");
+            plStatusLog::AddLineS("audio.log", "alBufferData error %s ", alGetString(error));
     }
 
      // Generate AL Source
@@ -341,7 +341,7 @@ bool plDSoundBuffer::SetupStreamingSource(void *data, unsigned bytes)
     error = alGetError();
     if( error != AL_NO_ERROR )
     {
-        plStatusLog::AddLineS("audio.log", "Failed to create audio source %d %d", error, source);
+        plStatusLog::AddLineS("audio.log", "Failed to create audio source %s %d", alGetString(error), source);
         return false;
     }
     alSourcei(source, AL_BUFFER, 0);
@@ -567,7 +567,7 @@ bool plDSoundBuffer::VoiceFillBuffer(void *data, unsigned bytes, unsigned buffer
     {
         alSourcePlay(source);
     }
-    alGetError();
+    error = alGetError();
     
     return true;
 }

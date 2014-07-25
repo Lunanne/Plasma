@@ -117,7 +117,7 @@ plWinAudible::~plWinAudible()
 
     delete fProxyGen;
     for (int i = 0; i < fSoundObjs.Count(); i++)
-        delete(fSoundObjs[i]);
+        fSoundObjs.Remove(i);
     fSoundObjs.SetCountAndZero(0);
 
 }
@@ -414,7 +414,7 @@ void plWinAudible::SetFilename(int index, const char *filename, bool isCompresse
         hsStatusMessageF( "ERROR: Sound index out of range (index %d, count %d)\n", index,  fSoundObjs.GetCount() );
         return;
     }
-    plWin32StreamingSound *pStreamingSound = plWin32StreamingSound::ConvertNoRef(fSoundObjs[ index ]);
+    plWin32StreamingSound* pStreamingSound = plWin32StreamingSound::ConvertNoRef(fSoundObjs[index]);
     if(pStreamingSound)
     {
         pStreamingSound->SetFilename(filename, isCompressed);

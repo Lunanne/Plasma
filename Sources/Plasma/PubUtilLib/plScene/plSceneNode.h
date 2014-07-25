@@ -150,6 +150,8 @@ public:
     void SetFilterGenericsOnly(bool b) { fFilterGenerics = b; }
 
     const hsTArray<plDrawable*>& GetDrawPool() const { return fDrawPool; }
+
+    hsTArray<plSceneObject*>& GetSceneObjects() { return fSceneObjects; } //HAX
 };
 
 #endif // plSceneNode_inc

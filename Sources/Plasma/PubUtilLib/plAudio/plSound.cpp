@@ -805,6 +805,10 @@ bool plSound::ILoadDataBuffer( void )
 {
     if(!fDataBufferLoaded)
     {
+        if (!fDataBufferKey)
+        {
+            return false;
+        }
         plSoundBuffer *buffer = (plSoundBuffer *)fDataBufferKey->RefObject();
         if(!buffer)
         {

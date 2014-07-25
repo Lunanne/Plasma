@@ -43,6 +43,8 @@ You can contact Cyan Worlds, Inc. by email legal@cyan.com
 #ifndef plWinAudible_inc
 #define plWinAudible_inc
 
+#include <memory>
+
 #include "plAudible.h"
 #include "hsTemplates.h"
 #include "hsMatrix44.h"
@@ -125,7 +127,7 @@ public:
     virtual plDrawableSpans*    CreateProxy(hsGMaterial* mat, hsTArray<uint32_t>& idx, plDrawableSpans* addTo);
     
 private:
-    hsTArray<plSound    *>      fSoundObjs;
+    hsTArray<plSound*>          fSoundObjs;
     plKey                       fSceneNode;
     plWinAudibleProxy*          fProxyGen;
     hsMatrix44                  fLocalToWorld;
