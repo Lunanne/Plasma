@@ -261,7 +261,9 @@ plMoviePlayer::plMoviePlayer() :
     fStartTime(0),
     fAudioPlayer(),
     fPosition(hsPoint2()),
-    fAudioInterface()
+    fAudioInterface(),
+    fPlaying(true),
+    fOpusDecoder(nil)
 {
     fScale.Set(1.0f, 1.0f);
 
@@ -286,6 +288,7 @@ plMoviePlayer::plMoviePlayer() :
 
 plMoviePlayer::~plMoviePlayer()
 {
+    opus_decoder_destroy(fOpusDecoder);
     if (fPlate)
         // The plPlate owns the Mipmap Texture, so it destroys it for us
         plPlateManager::Instance().DestroyPlate(fPlate);
@@ -293,6 +296,7 @@ plMoviePlayer::~plMoviePlayer()
     if (fReader)
         fReader->Close();
 #endif
+    
 }
 
 int64_t plMoviePlayer::GetMovieTime() const
@@ -424,6 +428,9 @@ bool plMoviePlayer::Start()
     plateMgr.CreatePlate(&fPlate, fPosition.fX, fPosition.fY, width, height);
     fPlate->SetVisible(true);
     fTexture = fPlate->CreateMaterial(static_cast<uint32_t>(video->GetWidth()), static_cast<uint32_t>(video->GetHeight()), nullptr);
+
+    fPlaying = true;
+
     return true;
 #else
     return false;
@@ -432,40 +439,44 @@ bool plMoviePlayer::Start()
 
 bool plMoviePlayer::NextFrame()
 {
-#ifdef VPX_AVAILABLE
-    // Get our current timecode
-    int64_t movieTime = 0;
-    if (fStartTime == 0)
-        fStartTime = static_cast<int64_t>(hsTimer::GetMilliSeconds());
-    else
-        movieTime = GetMovieTime();
-
-    std::vector<blkbuf_t> audio;
-    std::vector<blkbuf_t> video;
+    if (fPlaying)
     {
-        uint8_t tracksWithData = 0;
-        if (fAudioTrack)
-        {
-            if (fAudioTrack->GetFrames(this, movieTime, audio))
-                tracksWithData++;
-        }
-        if (fVideoTrack)
-        {
-            if (fVideoTrack->GetFrames(this, movieTime, video))
-                tracksWithData++;
-        }
-        if (tracksWithData == 0)
-            return false;
-    }
+#ifdef VPX_AVAILABLE
+        // Get our current timecode
+        int64_t movieTime = 0;
+        if (fStartTime == 0)
+            fStartTime = static_cast<int64_t>(hsTimer::GetMilliSeconds());
+        else
+            movieTime = GetMovieTime();
 
-    // Show our mess
-    IProcessVideoFrame(video);
-    IProcessAudioFrame(audio);
+        std::vector<blkbuf_t> audio;
+        std::vector<blkbuf_t> video;
+        {
+            uint8_t tracksWithData = 0;
+            if (fAudioTrack)
+            {
+                if (fAudioTrack->GetFrames(this, movieTime, audio))
+                    tracksWithData++;
+            }
+            if (fVideoTrack)
+            {
+                if (fVideoTrack->GetFrames(this, movieTime, video))
+                    tracksWithData++;
+            }
+            if (tracksWithData == 0)
+                return false;
+        }
 
-    return true;
+        // Show our mess
+        IProcessVideoFrame(video);
+        IProcessAudioFrame(audio);
+
+        return true;
 #else
-    return false;
+        return false;
 #endif // VPX_AVAILABLE
+    }
+    return false;
 }
 
 bool plMoviePlayer::IProcessAudioFrame(const std::vector<blkbuf_t>& frames)
@@ -494,4 +505,9 @@ bool plMoviePlayer::IProcessAudioFrame(const std::vector<blkbuf_t>& frames)
         }
     }
     return true;
+}
+
+void plMoviePlayer::Stop()
+{
+    fPlaying = false;
 }

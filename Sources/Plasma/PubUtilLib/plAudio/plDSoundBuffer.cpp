@@ -567,8 +567,11 @@ bool plDSoundBuffer::VoiceFillBuffer(void *data, unsigned bytes, unsigned buffer
     {
         alSourcePlay(source);
     }
-    error = alGetError();
-    
+    if ((error = alGetError()) != AL_NO_ERROR)
+    {
+        plStatusLog::AddLineS("audio.log", "Failed to queue buffer %d", error);
+        return false;
+    }
     return true;
 }
 

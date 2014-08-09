@@ -2,6 +2,7 @@
 #include <fstream>
 
 #include "hsResMgr.h"
+#include "plFormat.h"
 
 #include "plDSoundBuffer.h"
 
@@ -17,7 +18,7 @@ plWin32VideoSound::plWin32VideoSound() : plWin32Sound()
     fDSoundBuffer = new plDSoundBuffer(0, header, false, false, false, true);
     fDSoundBuffer->SetupVoiceSource();
     uniqueID++;
-    hsgResMgr::ResMgr()->NewKey(plString::Format("videosound#%d", uniqueID), this, plLocation::kGlobalFixedLoc);
+    hsgResMgr::ResMgr()->NewKey(plFormat("videosound#{}", uniqueID), this, plLocation::kGlobalFixedLoc);
     fSoftVolume = 1.0f;
 }
 
@@ -28,7 +29,7 @@ plWin32VideoSound::~plWin32VideoSound()
 
 void plWin32VideoSound::UpdateSoundBuffer(unsigned char* buffer, size_t size)
 {
-    unsigned int bufferID;
+    unsigned int bufferID = 0;
 
     if (fDSoundBuffer->GetAvailableBufferId(&bufferID))
     {

@@ -886,9 +886,9 @@ bool plClient::IHandleMovieMsg(plMovieMsg* mov)
         fMovies[i]->Pause(true);
     if( mov->GetCmd() & plMovieMsg::kResume )
         fMovies[i]->Pause(false);
+#endif
     if( mov->GetCmd() & plMovieMsg::kStop )
         fMovies[i]->Stop();
-#endif
 
     // If a movie has lost its filename, it means something went horribly wrong
     // with playing it and it has shutdown. Or we just stopped it. Either way, 

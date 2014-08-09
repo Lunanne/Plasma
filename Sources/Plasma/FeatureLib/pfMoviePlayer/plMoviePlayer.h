@@ -89,6 +89,8 @@ protected:
     plVideoAudible fAudioPlayer;
     plAudioInterface fAudioInterface;
 
+    bool fPlaying;
+
     int64_t GetMovieTime() const;
     bool IOpenMovie();
     bool IProcessVideoFrame(const std::vector<blkbuf_t>& frames);
@@ -100,6 +102,8 @@ public:
 
     bool Start();
     bool NextFrame();
+
+    void Stop();
 
     plFileName GetFilename() const { return fMoviePath; }
     void SetFilename(const plFileName& filename) { fMoviePath = filename; }
