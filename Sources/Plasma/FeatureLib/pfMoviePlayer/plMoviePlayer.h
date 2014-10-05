@@ -116,12 +116,12 @@ public:
     void SetScale(const hsPoint2& scale) { fScale = scale; }
     void SetScale(float x, float y) { fScale.Set(x, y); }
 
-    void AddCallback(plMessage* msg) { hsRefCnt_SafeRef(msg); fCallbacks.Append(msg); }
-    uint32_t GetNumCallbacks() const { return 0; }
-    plMessage* GetCallback(int i) const { return nullptr; }
+    void AddCallback(plMessage* msg) { hsRefCnt_SafeRef(msg); fCallbacks.push_back(msg); }
+    uint32_t GetNumCallbacks() const { return fCallbacks.size(); }
+    plMessage* GetCallback(int i) const { return fCallbacks[i]; }
 
 private:
-    hsTArray<plMessage*> fCallbacks;
+    std::vector<plMessage*> fCallbacks;
 };
 
 #endif // _plMoviePlayer_inc

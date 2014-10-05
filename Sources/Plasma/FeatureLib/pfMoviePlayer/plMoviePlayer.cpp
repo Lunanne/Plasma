@@ -268,27 +268,27 @@ plMoviePlayer::plMoviePlayer() :
     fScale.Set(1.0f, 1.0f);
 
     
-    fAudioSound = std::shared_ptr<plWin32VideoSound>(new plWin32VideoSound());
-    fAudioPlayer.SetSound(fAudioSound);
-    plSceneNode* sceneNode = plClient::GetInstance()->GetCurrentScene();
-    if (sceneNode != nullptr)
-    {
-        hsTArray<plSceneObject*>& sceneObjects = sceneNode->GetSceneObjects();
-        for (int i = 0; i < sceneObjects.GetCount(); ++i)
-        {
-            if (sceneObjects[i]->GetAudioInterface() == nullptr)
-            {
-                fAudioInterface.ISetAudible(&fAudioPlayer);
-                sceneObjects[i]->SetAudioInterface(&fAudioInterface);
-                break;
-            }
-        }
-    }
+    //fAudioSound = std::shared_ptr<plWin32VideoSound>(new plWin32VideoSound());
+    //fAudioPlayer.SetSound(fAudioSound);
+    //plSceneNode* sceneNode = plClient::GetInstance()->GetCurrentScene();
+    //if (sceneNode != nullptr)
+    //{
+    //    hsTArray<plSceneObject*>& sceneObjects = sceneNode->GetSceneObjects();
+    //    for (int i = 0; i < sceneObjects.GetCount(); ++i)
+    //    {
+    //        if (sceneObjects[i]->GetAudioInterface() == nullptr)
+    //        {
+    //            fAudioInterface.ISetAudible(&fAudioPlayer);
+    //            sceneObjects[i]->SetAudioInterface(&fAudioInterface);
+    //            break;
+    //        }
+    //    }
+    //}
 }
 
 plMoviePlayer::~plMoviePlayer()
 {
-    opus_decoder_destroy(fOpusDecoder);
+//    opus_decoder_destroy(fOpusDecoder);
     if (fPlate)
         // The plPlate owns the Mipmap Texture, so it destroys it for us
         plPlateManager::Instance().DestroyPlate(fPlate);
@@ -414,10 +414,10 @@ bool plMoviePlayer::Start()
         return false;
 
     //initialize opus
-    int error;
-    fOpusDecoder = opus_decoder_create(48000, 1, &error);
-    if (error != OPUS_OK)
-        hsAssert(false, "Error occured initalizing opus");
+//    int error;
+//    fOpusDecoder = opus_decoder_create(48000, 1, &error);
+//    if (error != OPUS_OK)
+//        hsAssert(false, "Error occured initalizing opus");
 
     // Need to figure out scaling based on pipe size.
     plPlateManager& plateMgr = plPlateManager::Instance();
@@ -455,7 +455,7 @@ bool plMoviePlayer::NextFrame()
             uint8_t tracksWithData = 0;
             if (fAudioTrack)
             {
-                if (fAudioTrack->GetFrames(this, movieTime, audio))
+//                if (fAudioTrack->GetFrames(this, movieTime, audio))
                     tracksWithData++;
             }
             if (fVideoTrack)
@@ -464,12 +464,15 @@ bool plMoviePlayer::NextFrame()
                     tracksWithData++;
             }
             if (tracksWithData == 0)
+            {
+                Stop();
                 return false;
+            }
         }
 
         // Show our mess
         IProcessVideoFrame(video);
-        IProcessAudioFrame(audio);
+//        IProcessAudioFrame(audio);
 
         return true;
 #else
@@ -509,9 +512,9 @@ bool plMoviePlayer::IProcessAudioFrame(const std::vector<blkbuf_t>& frames)
 
 bool plMoviePlayer::Stop()
 {
-    fplaying = false;
-    for (int i = 0; i < fCallbacks.GetCount(); i++)
+    fPlaying = false;
+    for (int i = 0; i < fCallbacks.size(); i++)
         fCallbacks[i]->Send();
-    fCallbacks.Reset();
+    fCallbacks.clear();
     return false;
 }
