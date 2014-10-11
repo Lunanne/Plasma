@@ -121,7 +121,7 @@ if(WIN32)
     source_group("DX\\Header Files" FILES ${plDXPipeline_HEADERS})
 else()
     target_link_libraries(plPipeline EGL)
-    target_link_libraries(plPipeline GL)
+    target_link_libraries(plPipeline GLESv2)
 
     source_group("GL\\Source Files" FILES ${plGLPipeline_SOURCES})
     source_group("GL\\Header Files" FILES ${plGLPipeline_HEADERS})
