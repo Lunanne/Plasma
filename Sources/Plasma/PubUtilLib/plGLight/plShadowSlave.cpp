@@ -48,9 +48,6 @@ You can contact Cyan Worlds, Inc. by email legal@cyan.com
 #include <cfloat>
 #include <cmath>
 
-#ifdef HS_BUILD_FOR_WIN32
-#define isnan _isnan
-#endif
 
 static const float kMinMinZ = 1.f; // totally random arbitrary number (has to be > 0).
 
@@ -137,9 +134,9 @@ bool plShadowSlave::ISetupPerspViewTransform()
     // is probably data-side.  I take full responsibility for this
     // hack-around breaking the entire system, loosing data, causing
     // unauthorized credit card transactions, etc.      
-    if (isnan(bnd.GetMins().fX) || isnan(bnd.GetMins().fY))
+    if (std::isnan(bnd.GetMins().fX) || std::isnan(bnd.GetMins().fY))
         return false;
-    if (isnan(bnd.GetMaxs().fX) || isnan(bnd.GetMaxs().fY))
+    if (std::isnan(bnd.GetMaxs().fX) || std::isnan(bnd.GetMaxs().fY))
         return false;
 
     float cotX, cotY;

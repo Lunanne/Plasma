@@ -325,7 +325,9 @@ uint32_t plSecureStream::IRead(uint32_t bytes, void* buffer)
         }
         else
         {
+#if HS_BUILD_FOR_WIN32
             hsDebugMessage("Error on Windows read", GetLastError());
+#endif
         }
     }
     return numItems;

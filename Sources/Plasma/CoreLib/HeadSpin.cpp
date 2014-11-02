@@ -119,13 +119,13 @@ void ErrorAssert(int line, const char* file, const char* fmt, ...)
     va_list args;
     va_start(args, fmt);
     vsnprintf(msg, arrsize(msg), fmt, args);
-#ifdef HS_DEBUGGING
+#ifdef _MSC_VER
     if (s_GuiAsserts)
     {
         if(_CrtDbgReport(_CRT_ASSERT, file, line, NULL, msg))
             DebugBreak();
     } else
-#endif // HS_DEBUGGING
+#endif // _MSC_VER
       if (DebugIsDebuggerPresent()) {
         char str[] = "-------\nASSERTION FAILED:\nFile: %s   Line: %i\nMessage: %s\n-------";
         DebugMsg(str, file, line, msg);
