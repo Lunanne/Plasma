@@ -128,7 +128,7 @@ bool plClient::Shutdown()
 }
 
 
-bool plClient::InitPipeline(hsWindowHndl display)
+bool plClient::InitPipeline(GLFWwindow* display)
 {
     hsStatusMessage("InitPipeline client\n");
 
@@ -146,7 +146,7 @@ bool plClient::InitPipeline(hsWindowHndl display)
 
 
     /* Create the pipeline */
-    plPipeline* pipe = new plGLPipeline(display, fWindowHndl, &devRec);
+    plPipeline* pipe = new plGLPipeline(display, &devRec);
     if (pipe->GetErrorString() != nullptr)
     {
         hsStatusMessage(pipe->GetErrorString());

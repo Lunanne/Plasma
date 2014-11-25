@@ -43,47 +43,78 @@ You can contact Cyan Worlds, Inc. by email legal@cyan.com
 #include "plGLClient/plGLClient.h"
 
 #include "plResMgr/plResManager.h"
+#include <GLFW/glfw3.h>
 
-#include <xcb/xcb.h>
-#include <X11/Xlib-xcb.h>
 #include <unistd.h>
+
+static void error_callback(int error, const char* description)
+{
+    fprintf(stderr, "Error description %s \n", description);
+}
+
+static void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
+{
+    if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
+        glfwSetWindowShouldClose(window, GL_TRUE);
+}
 
 int main()
 {
     /* Open the connection to the X server */
-    xcb_connection_t* connection = xcb_connect(nullptr, nullptr);
+//    xcb_connection_t* connection = xcb_connect(nullptr, nullptr);
+//
+//
+//    /* Get the first screen */
+//    const xcb_setup_t      *setup  = xcb_get_setup(connection);
+//    xcb_screen_iterator_t   iter   = xcb_setup_roots_iterator(setup);
+//    xcb_screen_t           *screen = iter.data;
+//
+//
+//    const uint32_t event_mask = XCB_EVENT_MASK_KEY_PRESS;
+//
+//    /* Create the window */
+//    xcb_window_t window = xcb_generate_id(connection);
+//    xcb_create_window(connection,                    /* Connection          */
+//                      XCB_COPY_FROM_PARENT,          /* depth (same as root)*/
+//                      window,                        /* window Id           */
+//                      screen->root,                  /* parent window       */
+//                      0, 0,                          /* x, y                */
+//                      800, 600,                      /* width, height       */
+//                      10,                            /* border_width        */
+//                      XCB_WINDOW_CLASS_INPUT_OUTPUT, /* class               */
+//                      screen->root_visual,           /* visual              */
+//                      XCB_CW_EVENT_MASK,             /* masks               */
+//                      &event_mask);                  /* masks               */
+//
+//    /* Map the window on the screen */
+//    xcb_map_window(connection, window);
+//
+//
+//    /* Make sure commands are sent before we pause so that the window gets shown */
+//    xcb_flush(connection);
 
+    glfwSetErrorCallback(error_callback);
+    if (!glfwInit())
+    {
+        fprintf(stderr, "Failed to initialize GLFW\n");
+        return -1;
+    }
+    
+    glfwDefaultWindowHints();
+    glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
+    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 2);
+    GLFWwindow* window = glfwCreateWindow(800, 600, "PlGLClient", NULL,NULL);
+    if(window == nullptr)
+    {
+        return 1;
+    }
 
-    /* Get the first screen */
-    const xcb_setup_t      *setup  = xcb_get_setup(connection);
-    xcb_screen_iterator_t   iter   = xcb_setup_roots_iterator(setup);
-    xcb_screen_t           *screen = iter.data;
-
-
-    const uint32_t event_mask = XCB_EVENT_MASK_KEY_PRESS;
-
-    /* Create the window */
-    xcb_window_t window = xcb_generate_id(connection);
-    xcb_create_window(connection,                    /* Connection          */
-                      XCB_COPY_FROM_PARENT,          /* depth (same as root)*/
-                      window,                        /* window Id           */
-                      screen->root,                  /* parent window       */
-                      0, 0,                          /* x, y                */
-                      800, 600,                      /* width, height       */
-                      10,                            /* border_width        */
-                      XCB_WINDOW_CLASS_INPUT_OUTPUT, /* class               */
-                      screen->root_visual,           /* visual              */
-                      XCB_CW_EVENT_MASK,             /* masks               */
-                      &event_mask);                  /* masks               */
-
-    /* Map the window on the screen */
-    xcb_map_window(connection, window);
-
-
-    /* Make sure commands are sent before we pause so that the window gets shown */
-    xcb_flush(connection);
-
-
+    glfwMakeContextCurrent(window);
+    glfwSetInputMode(window, GLFW_STICKY_KEYS, true);
+    glfwSetKeyCallback(window, key_callback);
+    
     plResManager *resMgr = new plResManager();
     resMgr->SetDataPath("dat");
     hsgResMgr::Init(resMgr);
@@ -94,11 +125,11 @@ int main()
         return 1;
     }
 
-    gClient->SetWindowHandle((hsWindowHndl)window);
+    gClient->SetWindowHandle(window);
+//
+//    Display* display = XOpenDisplay(nullptr);
 
-    Display* display = XOpenDisplay(nullptr);
-
-    if (gClient->InitPipeline((hsWindowHndl)display))
+    if (gClient->InitPipeline(window))
     {
         return 1;
     }
@@ -109,22 +140,11 @@ int main()
     }
 
 
-    do
+    while (!glfwWindowShouldClose(window))
     {
         gClient->MainLoop();
-
-        if (gClient->GetDone()) {
-            break;
-        }
-
-        xcb_generic_event_t* event = xcb_poll_for_event(connection);
-        if (event && ((event->response_type & ~0x80) == XCB_KEY_PRESS))
-        {
-            gClient->SetDone(true);
-        }
-    } while (true);
-
-
+        glfwPollEvents();
+    }
     if (gClient)
     {
         gClient->Shutdown();
@@ -135,7 +155,9 @@ int main()
     hsgResMgr::Shutdown(); // deletes fResMgr
 
 
-    xcb_disconnect(connection);
+    
+    glfwDestroyWindow(window);
+    glfwTerminate();
 
     return 0;
 }

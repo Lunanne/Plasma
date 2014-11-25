@@ -46,7 +46,11 @@ You can contact Cyan Worlds, Inc. by email legal@cyan.com
 #include "plPipeline/hsGDeviceRef.h"
 
 #define GL_GLEXT_PROTOTYPES
+#ifdef HS_BUILD_FOR_OSX
+#include <OpenGL/OpenGL.h>
+#else
 #include <GL/gl.h>
+#endif
 
 class plGBufferGroup;
 

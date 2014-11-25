@@ -48,6 +48,9 @@ find_package(Speex REQUIRED)  #TODO: Not required if we aren't building the clie
 find_package(VPX)
 find_package(Opus)
 find_package(CURL REQUIRED)
+find_package(GLFW REQUIRED)
+find_package(OpenGL REQUIRED)
+
 find_package(Freetype)
 
 if(WIN32)
@@ -155,6 +158,7 @@ endif(MSVC)
 
 #TODO: Make the OpenSSL includes less promiscuous so this isn't needed
 include_directories(${OPENSSL_INCLUDE_DIR})
+include_directories(${GLFW3_INCLUDE_DIRS})
 
 add_subdirectory(Sources/Plasma)
 add_subdirectory(Sources/Tools)

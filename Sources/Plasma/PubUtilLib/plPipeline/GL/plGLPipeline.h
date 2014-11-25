@@ -46,6 +46,8 @@ You can contact Cyan Worlds, Inc. by email legal@cyan.com
 #include "plPipeline/hsG3DDeviceSelector.h"
 #include "plGLDevice.h"
 
+#include <GLFW/glfw3.h>
+
 class plIcicle;
 class plGLMaterialShaderRef;
 
@@ -58,7 +60,7 @@ protected:
     plGLMaterialShaderRef* fMatRefList;
 
 public:
-    plGLPipeline(hsWindowHndl display, hsWindowHndl window, const hsG3DDeviceModeRecord *devMode);
+    plGLPipeline(GLFWwindow* display, const hsG3DDeviceModeRecord *devMode);
     virtual ~plGLPipeline();
 
     CLASSNAME_REGISTER(plGLPipeline);

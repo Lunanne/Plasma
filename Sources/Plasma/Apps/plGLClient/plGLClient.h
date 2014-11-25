@@ -46,6 +46,7 @@ You can contact Cyan Worlds, Inc. by email legal@cyan.com
 #include "HeadSpin.h"
 #include <list>
 #include <vector>
+#include <GLFW/glfw3.h>
 
 #include "pnKeyedObject/hsKeyedObject.h"
 #include "pnKeyedObject/plUoid.h"
@@ -97,7 +98,7 @@ protected:
     plPipeline*             fPipeline;
     hsColorRGBA             fClearColor;
 
-    hsWindowHndl            fWindowHndl;
+    GLFWwindow*            fWindowHndl;
     bool                    fDone;
     double                  fLastProgressUpdate;
 
@@ -120,7 +121,7 @@ public:
 
     virtual bool MsgReceive(plMessage* msg);
 
-    bool InitPipeline(hsWindowHndl display);
+    bool InitPipeline(GLFWwindow* display);
 
 
     virtual bool StartInit();
@@ -130,8 +131,8 @@ public:
     plClient& SetDone(bool done) { fDone = done; return *this; }
     bool GetDone() { return fDone; }
 
-    virtual plClient& SetWindowHandle(hsWindowHndl hndl) { fWindowHndl = hndl; return *this; }
-    hsWindowHndl GetWindowHandle() { return fWindowHndl; }
+    virtual plClient& SetWindowHandle(GLFWwindow* hndl) { fWindowHndl = hndl; return *this; }
+    GLFWwindow* GetWindowHandle() { return fWindowHndl; }
 
 protected:
     // Hackery to avoid all of plAgeLoader and the netclient stuff

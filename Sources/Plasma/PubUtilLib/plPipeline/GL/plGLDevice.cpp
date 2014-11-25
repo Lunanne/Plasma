@@ -43,8 +43,13 @@ You can contact Cyan Worlds, Inc. by email legal@cyan.com
 #include "plGLDevice.h"
 #include "plGLPipeline.h"
 
+#ifdef HS_BUILD_FOR_OSX
+#include <OpenGL/gl.h>
+#include <OpenGL/glext.h>
+#else
 #include <GL/gl.h>
 #include <GL/glext.h>
+#endif
 
 #include "plDrawable/plGBufferGroup.h"
 
@@ -71,10 +76,7 @@ GLfloat* hsMatrix2GL(const hsMatrix44& src, GLfloat* dst)
 
 plGLDevice::plGLDevice()
 :   fErrorMsg(nullptr),
-    fDisplay(EGL_NO_DISPLAY),
-    fSurface(EGL_NO_SURFACE),
-    fContext(EGL_NO_CONTEXT),
-    fCurrentProgram(0)
+fWindow(nullptr)
 {
     memcpy(fMatrixL2W, kIdentityMatrix, sizeof(GLfloat) * 16);
     memcpy(fMatrixW2C, kIdentityMatrix, sizeof(GLfloat) * 16);
@@ -82,72 +84,9 @@ plGLDevice::plGLDevice()
 }
 
 
-bool plGLDevice::InitDevice()
+bool plGLDevice::InitDevice(GLFWwindow* window)
 {
-    if (!eglBindAPI(EGL_OPENGL_ES_API))
-    {
-        fErrorMsg = "Could not bind to correct API";
-        return false;
-    }
-
-    /* Set up the display */
-    fDisplay = eglGetDisplay((EGLNativeDisplayType)fDevice);
-    if (fDisplay == EGL_NO_DISPLAY)
-    {
-        fErrorMsg = "Could not get the display";
-        return false;
-    }
-
-    if (!eglInitialize(fDisplay, nullptr, nullptr))
-    {
-        fErrorMsg = "Could not initialize the display";
-        return false;
-    }
-
-
-    /* Set up the config attributes for EGL */
-    EGLConfig  config;
-    EGLint     config_count;
-    EGLint config_attrs[] = {
-        EGL_BUFFER_SIZE, 16,
-        EGL_DEPTH_SIZE, 16,
-        EGL_RENDERABLE_TYPE,
-        EGL_OPENGL_ES_BIT,
-        EGL_NONE
-    };
-
-    if (!eglChooseConfig(fDisplay, config_attrs, &config, 1, &config_count) || config_count != 1)
-    {
-        fErrorMsg = "Could not choose appropriate config";
-        return false;
-    }
-
-
-    /* Set up the rendering surface */
-    fSurface = eglCreateWindowSurface(fDisplay, config, (EGLNativeWindowType)fWindow, nullptr);
-    if (fSurface == EGL_NO_SURFACE)
-    {
-        fErrorMsg = "Unable to create rendering surface";
-        return false;
-    }
-
-
-    /* Set up the GL context */
-    EGLint ctx_attrs[] = {
-        EGL_CONTEXT_CLIENT_VERSION, 2,
-        EGL_NONE
-    };
-
-    fContext = eglCreateContext(fDisplay, config, EGL_NO_CONTEXT, ctx_attrs);
-    if (fContext == EGL_NO_CONTEXT)
-    {
-        fErrorMsg = "Unable to create rendering context";
-        return false;
-    }
-
-
-    /* Associate everything */
-    eglMakeCurrent(fDisplay, fSurface, fSurface, fContext);
+    fWindow = window;
 
 
     glEnable(GL_DEPTH_TEST);
@@ -183,7 +122,7 @@ bool plGLDevice::EndRender()
 {
     if (fPipeline->fCurrRenderTarget == nullptr)
     {
-        eglSwapBuffers(fDisplay, fSurface);
+        glfwSwapBuffers(fWindow);
     }
     return true;
 }

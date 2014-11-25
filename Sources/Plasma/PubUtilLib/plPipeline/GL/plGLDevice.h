@@ -42,7 +42,7 @@ You can contact Cyan Worlds, Inc. by email legal@cyan.com
 #ifndef _plGLDevice_h_
 #define _plGLDevice_h_
 
-#include <EGL/egl.h>
+#include <GLFW/glfw3.h>
 
 #include "hsMatrix44.h"
 #include "plGLDeviceRef.h"
@@ -58,24 +58,20 @@ public:
 
 public:
     plGLPipeline*       fPipeline;
-    hsWindowHndl        fDevice;
-    hsWindowHndl        fWindow;
+    GLFWwindow*        fWindow;
 
     const char*         fErrorMsg;
 
-    EGLDisplay          fDisplay;
-    EGLSurface          fSurface;
-    EGLContext          fContext;
-
-    GLuint              fCurrentProgram;
-    GLfloat             fMatrixL2W[16];
-    GLfloat             fMatrixW2C[16];
-    GLfloat             fMatrixProj[16];
+//    EGLDisplay          fDisplay;
+//    EGLSurface          fSurface;
+//    EGLContext          fContext;
+//
+    GLuint              fProgram;
 
 public:
     plGLDevice();
 
-    bool InitDevice();
+    bool InitDevice(GLFWwindow* window);
 
     /**
      * Set rendering to the specified render target.

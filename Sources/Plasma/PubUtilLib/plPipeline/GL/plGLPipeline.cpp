@@ -52,8 +52,13 @@ You can contact Cyan Worlds, Inc. by email legal@cyan.com
 #include "plGLPipeline.h"
 #include "plGLMaterialShaderRef.h"
 
+#ifdef HS_BUILD_FOR_OSX
+#include <OpenGL/gl.h>
+#include <OpenGL/glext.h>
+#else
 #include <GL/gl.h>
 #include <GL/glext.h>
+#endif
 
 #include "hsTimer.h"
 
@@ -104,56 +109,20 @@ bool plRenderTriListFunc::RenderPrims() const
 
 
 
-plGLPipeline::plGLPipeline(hsWindowHndl display, hsWindowHndl window, const hsG3DDeviceModeRecord* devModeRec)
-:   pl3DPipeline(devModeRec), fMatRefList(nullptr)
+plGLPipeline::plGLPipeline(GLFWwindow* window,const hsG3DDeviceModeRecord* devModeRec)
+:   pl3DPipeline(devModeRec)
 {
-    fDevice.fDevice = display;
     fDevice.fWindow = window;
-    fDevice.fPipeline = this;
 
-    fDevice.InitDevice();
 
     glClearColor(0.f, 0.f, 0.f, 0.f);
-    glClearDepthf(1.f);
+    glClearDepth(1.0);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
 plGLPipeline::~plGLPipeline()
 {
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 /*****************************************************************************
  * STUBS STUBS STUBS
@@ -365,7 +334,7 @@ void plGLPipeline::ClearRenderTarget(const hsColorRGBA* col, const float* depth)
             masks |= GL_DEPTH_BUFFER_BIT;
 
         glClearColor(clearColor.r, clearColor.g, clearColor.b, clearColor.a);
-        glClearDepthf(clearDepth);
+        glClearDepth(clearDepth);
 
         glClear(masks);
     }

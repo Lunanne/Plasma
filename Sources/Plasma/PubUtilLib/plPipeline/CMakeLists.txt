@@ -110,6 +110,9 @@ if(PLASMA_PIPELINE STREQUAL "OpenGL")
 
     target_link_libraries(plPipeline EGL)
     target_link_libraries(plPipeline GLESv2)
+  target_link_libraries(plPipeline ${OPENGL_LIBRARIES})
+    target_link_libraries(plPipeline ${GLFW_LIBRARY})
+
 endif(PLASMA_PIPELINE STREQUAL "OpenGL")
 
 target_link_libraries(plPipeline CoreLib)
@@ -132,4 +135,5 @@ endif(PLASMA_PIPELINE STREQUAL "DirectX")
 if(PLASMA_PIPELINE STREQUAL "OpenGL")
     source_group("GL\\Source Files" FILES ${plGLPipeline_SOURCES})
     source_group("GL\\Header Files" FILES ${plGLPipeline_HEADERS})
+
 endif(PLASMA_PIPELINE STREQUAL "OpenGL")
