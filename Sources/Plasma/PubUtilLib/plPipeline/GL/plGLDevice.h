@@ -45,7 +45,7 @@ You can contact Cyan Worlds, Inc. by email legal@cyan.com
 #include <GLFW/glfw3.h>
 
 #include "hsMatrix44.h"
-#include "plGLDeviceRef.h"
+#include "plGLDeviceRefs.h"
 
 class plGLPipeline;
 class plRenderTarget;

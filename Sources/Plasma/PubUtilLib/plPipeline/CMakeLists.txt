@@ -94,8 +94,8 @@ set(plDXPipeline_HEADERS
 
 set(plGLPipeline_HEADERS
     GL/plGLDevice.h
-    GL/plGLDeviceRef.h
     GL/plGLMaterialShaderRef.h
+    GL/plGLDeviceRefs.h
     GL/plGLPipeline.h
 )
 

@@ -42,7 +42,7 @@ You can contact Cyan Worlds, Inc. by email legal@cyan.com
 #include "plPipeline/hsWinRef.h"
 
 #include "plGLPipeline.h"
-#include "plGLDeviceRef.h"
+#include "plGLDeviceRefs.h"
 
 #include "plProfile.h"
 #include "plStatusLog/plStatusLog.h"

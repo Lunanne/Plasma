@@ -113,6 +113,7 @@ plGLPipeline::plGLPipeline(GLFWwindow* window,const hsG3DDeviceModeRecord* devMo
 :   pl3DPipeline(devModeRec)
 {
     fDevice.fWindow = window;
+    fDevice.fPipeline = this;
 
 
     glClearColor(0.f, 0.f, 0.f, 0.f);
