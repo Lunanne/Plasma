@@ -49,11 +49,11 @@ You can contact Cyan Worlds, Inc. by email legal@cyan.com
 #include "pl3DPipeline.h"
 REGISTER_NONCREATABLE(pl3DPipeline);
 
-#ifdef HS_BUILD_FOR_WIN32
+#if defined(PLASMA_PIPELINE_DX)
     #include <d3d9.h>
     #include "DX/plDXPipeline.h"
     REGISTER_NONCREATABLE(plDXPipeline);
-#else
+#elif defined(PLASMA_PIPELINE_GL)
     #include "GL/plGLPipeline.h"
     REGISTER_NONCREATABLE(plGLPipeline);
 #endif

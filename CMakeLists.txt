@@ -52,7 +52,6 @@ find_package(Freetype)
 
 if(WIN32)
     find_package(PhysX REQUIRED)  #TODO: Not required if we aren't building the client
-    find_package(DirectX REQUIRED)
 endif(WIN32)
 
 if(VPX_FOUND AND Opus_FOUND)
@@ -100,6 +99,27 @@ endif(PLASMA_TARGETS STREQUAL "NoAvMsgs")
 if(PLASMA_TARGETS STREQUAL "Ethereal")
     add_definitions(-DSTREAM_LOGGER)
 endif(PLASMA_TARGETS STREQUAL "Ethereal")
+
+
+set_property(CACHE PLASMA_PIPELINE PROPERTY STRINGS "DirectX" "OpenGL")
+if(WIN32)
+    set(PLASMA_PIPELINE "DirectX"
+                        CACHE STRING "Which graphics backend to use")
+else(WIN32)
+    set(PLASMA_PIPELINE "OpenGL"
+                        CACHE STRING "Which graphics backend to use")
+endif(WIN32)
+
+if(PLASMA_PIPELINE STREQUAL "DirectX")
+    find_package(DirectX REQUIRED)
+    add_definitions(-DPLASMA_PIPELINE_DX)
+endif(PLASMA_PIPELINE STREQUAL "DirectX")
+
+if(PLASMA_PIPELINE STREQUAL "OpenGL")
+    find_package(OpenGL REQUIRED)
+    add_definitions(-DPLASMA_PIPELINE_GL)
+    add_definitions(-DMINIMAL_GL_BUILD)
+endif(PLASMA_PIPELINE STREQUAL "OpenGL")
 
 #Allow us to disable certain parts of the build
 option(PLASMA_BUILD_RESOURCE_DAT "Do we want to build resource.dat?" ON)
