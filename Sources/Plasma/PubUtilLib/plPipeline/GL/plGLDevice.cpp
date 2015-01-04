@@ -89,6 +89,80 @@ bool plGLDevice::InitDevice(GLFWwindow* window)
     fWindow = window;
 
 
+    /* TEMP: Shader init stuff */
+    const char* vs_src = "#version 100"
+                     "\n"
+                     "\n" "attribute vec3 position;"
+                     "\n" "attribute vec4 color;"
+                     "\n"
+                     "\n" "uniform mat4 matrix_l2w;"
+                     "\n" "uniform mat4 matrix_w2c;"
+                     "\n" "uniform mat4 matrix_proj;"
+                     "\n"
+                     "\n" "varying vec4 v_color;"
+                     "\n"
+                     "\n" "void main() {"
+                     "\n" "    vec4 pos = matrix_l2w * vec4(position, 1.0);"
+                     "\n" "         pos = matrix_w2c * pos;"
+                     "\n" "         pos = matrix_proj * pos;"
+                     "\n"
+                     "\n" "    gl_Position = pos;"
+                     "\n" "    v_color = color.zyxw;"
+                     "\n" "}";
+
+    const char* fs_src = "#version 100"
+                     "\n"
+                     "\n" "varying mediump vec4 v_color;"
+                     "\n"
+                     "\n" "void main() {"
+                     "\n" "    gl_FragColor = v_color;"
+                     "\n" "}";
+
+    GLuint vshader = glCreateShader(GL_VERTEX_SHADER);
+    glShaderSource(vshader, 1, &vs_src, nullptr);
+    glCompileShader(vshader);
+    
+    GLint result = GL_FALSE;
+    int infoLogLength;
+    glGetShaderiv(vshader, GL_COMPILE_STATUS, &result);
+    if (result == GL_FALSE)
+    {
+        glGetShaderiv(vshader, GL_INFO_LOG_LENGTH, &infoLogLength);
+        std::vector<char> VertexShaderErrorMessage(infoLogLength);
+        glGetShaderInfoLog(vshader, infoLogLength, NULL, &VertexShaderErrorMessage[0]);
+        fprintf(stdout, "vertex shader error output: %s\n", &VertexShaderErrorMessage[0]);
+    }
+
+
+    GLuint fshader = glCreateShader(GL_FRAGMENT_SHADER);
+    glShaderSource(fshader, 1, &fs_src, nullptr);
+    glCompileShader(fshader);
+
+    glGetShaderiv(fshader, GL_COMPILE_STATUS, &result);
+    if (result == GL_FALSE)
+    {
+        glGetShaderiv(fshader, GL_INFO_LOG_LENGTH, &infoLogLength);
+        std::vector<char> FragmentShaderErrorMessage(infoLogLength);
+        glGetShaderInfoLog(fshader, infoLogLength, NULL, &FragmentShaderErrorMessage[0]);
+        fprintf(stdout, "fragment shader error output : %s\n", &FragmentShaderErrorMessage[0]);
+    }
+    fProgram = glCreateProgram();
+    glAttachShader(fProgram, vshader);
+    glAttachShader(fProgram, fshader);
+
+    glLinkProgram(fProgram);
+    glUseProgram(fProgram);
+    
+    glGetProgramiv(fProgram, GL_LINK_STATUS, &result);
+    if (result == GL_FALSE)
+    {
+        glGetProgramiv(fProgram, GL_INFO_LOG_LENGTH, &infoLogLength);
+        std::vector<char> ProgramErrorMessage(std::max(infoLogLength, int(1)));
+        glGetProgramInfoLog(fProgram, infoLogLength, NULL, &ProgramErrorMessage[0]);
+        fprintf(stdout, "program error output: %s\n", &ProgramErrorMessage[0]);
+    }
+
+
     glEnable(GL_DEPTH_TEST);
     glDepthFunc(GL_LEQUAL);
     glDepthMask(GL_TRUE);
