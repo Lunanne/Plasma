@@ -8,6 +8,11 @@ if(PLASMA_PIPELINE STREQUAL "DirectX")
     include_directories(${DirectX_INCLUDE_DIR})
 endif(PLASMA_PIPELINE STREQUAL "DirectX")
 
+if(PLASMA_PIPELINE STREQUAL "OpenGL")
+include_directories(${GLFW_INCLUDE_DIR})
+include_directories(${OPENGL_INCLUDE_DIRS})
+endif(PLASMA_PIPELINE STREQUAL "OpenGL")
+
 set(plPipeline_SOURCES
     hsG3DDeviceSelector.cpp
     pl3DPipeline.cpp
@@ -108,8 +113,8 @@ endif(PLASMA_PIPELINE STREQUAL "DirectX")
 if(PLASMA_PIPELINE STREQUAL "OpenGL")
     add_library(plPipeline STATIC ${plPipeline_SOURCES} ${plGLPipeline_SOURCES} ${plPipeline_HEADERS} ${plGLPipeline_HEADERS})
 
-    target_link_libraries(plPipeline EGL)
-    target_link_libraries(plPipeline GLESv2)
+#   target_link_libraries(plPipeline EGL)
+#    target_link_libraries(plPipeline GLESv2)
   target_link_libraries(plPipeline ${OPENGL_LIBRARIES})
     target_link_libraries(plPipeline ${GLFW_LIBRARY})
 

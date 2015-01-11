@@ -66,6 +66,11 @@ public:
 //    EGLSurface          fSurface;
 //    EGLContext          fContext;
 //
+    GLuint              fCurrentProgram;
+    GLfloat             fMatrixL2W[16];
+    GLfloat             fMatrixW2C[16];
+    GLfloat             fMatrixProj[16];
+
     GLuint              fProgram;
 
 public:

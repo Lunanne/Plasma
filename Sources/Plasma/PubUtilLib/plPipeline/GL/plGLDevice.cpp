@@ -90,16 +90,16 @@ bool plGLDevice::InitDevice(GLFWwindow* window)
 
 
     /* TEMP: Shader init stuff */
-    const char* vs_src = "#version 100"
+    const char* vs_src = "#version 330 core"
                      "\n"
-                     "\n" "attribute vec3 position;"
-                     "\n" "attribute vec4 color;"
+                     "\n" "in vec3 position;"
+                     "\n" "in vec4 color;"
                      "\n"
                      "\n" "uniform mat4 matrix_l2w;"
                      "\n" "uniform mat4 matrix_w2c;"
                      "\n" "uniform mat4 matrix_proj;"
                      "\n"
-                     "\n" "varying vec4 v_color;"
+                     "\n" "out vec4 v_color;"
                      "\n"
                      "\n" "void main() {"
                      "\n" "    vec4 pos = matrix_l2w * vec4(position, 1.0);"
@@ -110,12 +110,12 @@ bool plGLDevice::InitDevice(GLFWwindow* window)
                      "\n" "    v_color = color.zyxw;"
                      "\n" "}";
 
-    const char* fs_src = "#version 100"
+    const char* fs_src = "#version 330 core"
                      "\n"
-                     "\n" "varying mediump vec4 v_color;"
-                     "\n"
+                     "\n" "in vec4 v_color;"
+                     "\n" "out vec4 v_fragColor;"
                      "\n" "void main() {"
-                     "\n" "    gl_FragColor = v_color;"
+                     "\n" "    v_fragColor = v_color;"
                      "\n" "}";
 
     GLuint vshader = glCreateShader(GL_VERTEX_SHADER);
