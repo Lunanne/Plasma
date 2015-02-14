@@ -110,7 +110,7 @@ bool plRenderTriListFunc::RenderPrims() const
 
 
 plGLPipeline::plGLPipeline(GLFWwindow* window,const hsG3DDeviceModeRecord* devModeRec)
-:   pl3DPipeline(devModeRec)
+:   pl3DPipeline(devModeRec), fMatRefList(nullptr)
 {
     fDevice.fWindow = window;
     fDevice.fPipeline = this;

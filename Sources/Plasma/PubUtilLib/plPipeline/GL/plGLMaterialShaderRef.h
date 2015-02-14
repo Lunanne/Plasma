@@ -42,7 +42,7 @@ You can contact Cyan Worlds, Inc. by email legal@cyan.com
 #ifndef _plGLMaterialShaderRef_inc_
 #define _plGLMaterialShaderRef_inc_
 
-#include "plGLDeviceRef.h"
+#include "plGLDeviceRefs.h"
 
 class hsGMaterial;
 

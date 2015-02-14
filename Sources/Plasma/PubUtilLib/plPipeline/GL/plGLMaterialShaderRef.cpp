@@ -45,8 +45,13 @@ You can contact Cyan Worlds, Inc. by email legal@cyan.com
 #include "HeadSpin.h"
 #include "plSurface/hsGMaterial.h"
 
+#ifdef HS_BUILD_FOR_OSX
+#include <OpenGL/gl.h>
+#include <OpenGL/glext.h>
+#else
 #include <GL/gl.h>
 #include <GL/glext.h>
+#endif
 
 
 plGLMaterialShaderRef::~plGLMaterialShaderRef()
